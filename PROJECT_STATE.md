@@ -2,65 +2,48 @@
 
 ## Current Slice
 
-- Phase: 00b - Coding standards, package skeleton, pyproject, CLI baseline
-- State: DONE
-- Agent: architect-agent
-- Started: 2026-06-20 13:50
+- Phase: 01 - Development environment
+- State: WAITING_FOR_USER
+- Agent: sre-agent
+- Started: 2026-06-20 14:00
 - Branch: main
-- Base commit: 29eb61a
+- Base commit: d5e2451
 
 ## Last PASS/FAIL
 
 - Last validation: 2026-06-20 14:00
-- Result: PASS - Phase 00b acceptance checks passed.
+- Result: WAITING_FOR_USER - Docker CLI/Compose missing and WSL not installed.
 
 ## Open Questions
 
-- None.
+- Install/enable Docker Desktop with Docker Compose and WSL2 locally. Do not send credentials, tokens, or secrets in chat.
 
 ## Current Decisions
 
 - Existing `CODEX_MASTER_PLAN.md` modifications are treated as user work and must not be staged by this slice.
 - No API keys, secrets, live trading, futures, leverage, shorts, databases, caches, or runtime artifacts may be committed.
+- Development mode recommendation: local PC. Production 24/7 infrastructure is deferred to a later phase.
 
 ## Files Changed In Current Slice
 
-- pyproject.toml
-- Makefile
-- scripts/dev.ps1
-- requirements.lock
-- requirements-dev.lock
-- constraints.txt
-- src/coinbase_freqtrade_guarded_bot/**
-- tests/test_imports.py
-- tests/test_cli.py
-- docs/CODING_STANDARDS.md
-- docs/PACKAGING.md
-- docs/EXECUTION_CONTEXT.md
-- docs/NETWORK_RESILIENCE.md
-- docs/DB_SCHEMA_POLICY.md
-- docs/TEST_QUALITY_GATES.md
-- docs/CODEX_USAGE_POLICY.md
-- docs/skills/*.md
 - LOG.md
 - PROJECT_STATE.md
 
 ## Tests And Checks
 
-- PASS - `[LOCAL_VENV] python -m pip install --upgrade pip`
-- PASS - `[LOCAL_VENV] python -m pip install -e .`
-- PASS - `[LOCAL_VENV] python -m coinbase_freqtrade_guarded_bot --help`
-- PASS - `[LOCAL_VENV] python -m pytest` (5 tests; pytest-socket default socket ban; pytest-cov configured)
-- PASS - `[LOCAL_VENV] ruff check .`
-- PASS - `[LOCAL_VENV] python -m pip check`
-- PASS - document completeness check for required Phase 00b docs/skills and phases 00-18
+- FAIL - `[HOST_POWERSHELL] docker --version`: Docker command not found.
+- FAIL - `[HOST_POWERSHELL] docker compose version`: Docker command not found.
+- PASS - `[HOST_POWERSHELL] git --version`: git version 2.51.1.windows.1.
+- PASS - `[HOST_POWERSHELL] python --version`: Python 3.13.3.
+- FAIL - `[HOST_POWERSHELL] wsl --status`: WSL is not installed.
+- PASS - `.env` is not tracked and no local `.env` exists.
 - PASS - no-secret smoke scan
 
 ## Quota-Safe Resume Fields
 
-- Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
-- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; verify Phase 00b is committed/pushed; continue Phase 01 environment verification.
-- Recommended commit message: `phase-00b: add package skeleton and CLI baseline`
+- Next deterministic command: `[HOST_POWERSHELL] docker --version`
+- Safe resume instruction: Install/enable Docker Desktop with Docker Compose and WSL2 locally, then read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; rerun Phase 01 checks.
+- Recommended commit message: `phase-01: record missing docker environment blocker`
 
 ## Risks
 

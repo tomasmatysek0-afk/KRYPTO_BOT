@@ -2,17 +2,17 @@
 
 ## STATUS SUMMARY
 
-Current phase: 00b - Coding standards, package skeleton, pyproject, CLI baseline
-Active agent: architect-agent
+Current phase: 01 - Development environment
+Active agent: sre-agent
 Last update: 2026-06-20 14:00
-State: DONE
+State: WAITING_FOR_USER
 Current branch: main
-Current commit: 29eb61a
-Note: Phase 00b acceptance passed. CODEX_MASTER_PLAN.md still has pre-existing unstaged user changes and is excluded from this slice.
+Current commit: d5e2451
+Note: Phase 01 is blocked because Docker is not available on PATH and WSL is not installed. CODEX_MASTER_PLAN.md still has pre-existing unstaged user changes and is excluded from this slice.
 
 ## OPEN QUESTIONS
 
-- None.
+- [ ] 2026-06-20 Phase 01 - Install/enable Docker Desktop with Docker Compose and WSL2 locally, then confirm `docker --version`, `docker compose version`, and `wsl --status` work in PowerShell. Do not send credentials or tokens in chat. (waiting for local setup)
 
 ## PHASE TRACKER
 
@@ -20,7 +20,7 @@ Note: Phase 00b acceptance passed. CODEX_MASTER_PLAN.md still has pre-existing u
 |---|---|---|---|---|
 | 00 | Repository bootstrap | DONE | 2026-06-20 | Restartable skeleton, policy docs, ignore rules, and skill stubs created. |
 | 00b | Coding standards and package skeleton | DONE | 2026-06-20 | Package skeleton, CLI, tooling, docs, locks, and smoke tests complete. |
-| 01 | Development environment | TODO | - | Not started. |
+| 01 | Development environment | WAITING_FOR_USER | - | Docker CLI/Compose and WSL are missing locally. |
 | 02 | Freqtrade Docker skeleton | TODO | - | Not started. |
 | 03 | Coinbase/Freqtrade capability check | TODO | - | Not started. |
 | 03b | Data Parity Gate | TODO | - | Not started. |
@@ -181,3 +181,34 @@ Git status: Pending final check before commit; CODEX_MASTER_PLAN.md remains pre-
 Recommended commit message: `phase-00b: add package skeleton and CLI baseline`
 Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
 Resume instructions: Read CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, PROJECT_STATE.md; verify Phase 00b is DONE and pushed; continue Phase 01 environment verification.
+
+### 2026-06-20 14:00 - Phase 01 - sre-agent
+**Action:** Started Phase 01 development environment verification after Phase 00b was committed and pushed.
+**Files read:** CODEX_MASTER_PLAN.md; AGENTS.md; LOG.md; PROJECT_STATE.md.
+**Files modified:** LOG.md; PROJECT_STATE.md.
+**Commands run:** `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] docker --version`; `[HOST_POWERSHELL] docker compose version`; `[HOST_POWERSHELL] git --version`; `[HOST_POWERSHELL] python --version`; `[HOST_POWERSHELL] wsl --status`; `[HOST_POWERSHELL] git ls-files -- .env`; `[HOST_POWERSHELL] Test-Path .\.env`; `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`.
+**Tests:** PARTIAL - `git version 2.51.1.windows.1` PASS; `Python 3.13.3` PASS; `.env` is not tracked and no local `.env` exists PASS; no-secret scan PASS; Docker CLI FAIL; Docker Compose FAIL; WSL FAIL.
+**Research:** Not required. This is local environment setup.
+**Decision:** Recommend development mode remains local PC. Production 24/7 infrastructure is deferred to a later infrastructure phase.
+**Result:** WAITING_FOR_USER
+**Next step:** Install/enable Docker Desktop and WSL2 locally, then rerun Phase 01 checks.
+
+### CHECKPOINT - 2026-06-20 14:00 - Phase 01
+State: WAITING_FOR_USER
+Done: Git, Python, `.env` tracking, and no-secret checks passed.
+In progress: Docker/WSL setup is blocked outside repository changes.
+Files changed since last checkpoint: LOG.md; PROJECT_STATE.md.
+Git diff summary: Phase 01 waiting-state documentation only; CODEX_MASTER_PLAN.md remains unstaged user work.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Docker CLI missing; Docker Compose missing; WSL not installed.
+Identified risks: Phase 02 cannot run Freqtrade Docker without Docker/Compose and WSL2.
+Next safe step: User installs/enables Docker Desktop with WSL2, then rerun `[HOST_POWERSHELL] docker --version`, `[HOST_POWERSHELL] docker compose version`, and `[HOST_POWERSHELL] wsl --status`.
+
+### QUOTA_SAFE_CHECKPOINT - 2026-06-20 14:00 - Phase 01
+Current slice: Phase 01 development environment verification.
+Files changed: LOG.md; PROJECT_STATE.md.
+Tests run: Docker, Docker Compose, Git, Python, WSL, `.env` tracking, no-secret scan.
+Git status: Pending commit of waiting-state docs; CODEX_MASTER_PLAN.md remains pre-existing unstaged user work.
+Recommended commit message: `phase-01: record missing docker environment blocker`
+Next deterministic command: `[HOST_POWERSHELL] docker --version` after local setup.
+Resume instructions: After Docker Desktop/WSL2 setup, read CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, and PROJECT_STATE.md; rerun Phase 01 checks; continue to Phase 02 only if Docker, Compose, WSL, Git, Python, `.env`, and no-secret checks pass.
