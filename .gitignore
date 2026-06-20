@@ -1,0 +1,72 @@
+# Secrets and local credentials
+.env
+.env.*
+!.env.example
+secrets/
+*.secret
+*.key
+*.pem
+*.p8
+*.p12
+*.crt
+*.cert
+*credentials*
+*token*
+
+# Python environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyright/
+.coverage
+.coverage.*
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Databases and runtime state
+*.db
+*.sqlite
+*.sqlite3
+*.duckdb
+KILL_SWITCH
+runtime/
+tmp/
+temp/
+
+# Logs and generated runtime artifacts
+*.log
+user_data/logs/
+logs/runtime/
+
+# Freqtrade runtime outputs
+user_data/data/
+user_data/backtest_results/
+user_data/hyperopt_results/
+user_data/freqaimodels/
+user_data/freqtrade.db
+
+# Reports and exports that can become large or contain runtime data
+reports/**/*.csv
+reports/**/*.parquet
+reports/**/*.jsonl
+reports/**/*.xlsx
+reports/**/*.zip
+reports/**/raw/
+exports/
+!reports/**/.gitkeep
+
+# Local editor and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
