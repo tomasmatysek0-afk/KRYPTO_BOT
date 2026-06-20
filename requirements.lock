@@ -1,0 +1,2 @@
+# Phase 00b runtime lock.
+# No runtime dependencies beyond the Python standard library.

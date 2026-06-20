@@ -22,3 +22,17 @@ Phase 00 creates directories only; no package code yet.
 
 Open questions:
 - None for Phase 00.
+
+### 2026-06-20 - Phase 00b packaging baseline
+Source:
+- CODEX_MASTER_PLAN.md
+- docs/PACKAGING.md
+
+Summary:
+The project uses a `src/` package layout with `hatchling` as the build backend and standard-library-only runtime code in Phase 00b.
+
+Decision impact:
+Runtime dependencies remain empty. Dev dependencies are limited to the allowed bootstrap stack and are locked separately.
+
+Open questions:
+- None.

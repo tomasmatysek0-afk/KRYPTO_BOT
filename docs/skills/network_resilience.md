@@ -22,3 +22,17 @@ No network dependencies are added in Phase 00.
 
 Open questions:
 - None for Phase 00.
+
+### 2026-06-20 - Phase 00b no-network unit baseline
+Source:
+- CODEX_MASTER_PLAN.md
+- docs/NETWORK_RESILIENCE.md
+
+Summary:
+Unit tests are configured with sockets disabled by default. Network client implementation remains deferred.
+
+Decision impact:
+`pytest-socket` is part of the Phase 00b dev stack; tests added in this phase perform no real network calls.
+
+Open questions:
+- None.

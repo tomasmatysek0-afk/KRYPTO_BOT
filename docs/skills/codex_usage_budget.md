@@ -22,3 +22,17 @@ Phase 00 creates `PROJECT_STATE.md` even though it is primarily a restartability
 
 Open questions:
 - None for Phase 00.
+
+### 2026-06-20 - Phase 00b resume policy
+Source:
+- CODEX_MASTER_PLAN.md
+- docs/CODEX_USAGE_POLICY.md
+
+Summary:
+Each Plus-safe slice must update LOG, PROJECT_STATE, tests/checks, commit, and push before continuing.
+
+Decision impact:
+Phase 00b will end with a quota-safe checkpoint and pushed commit before moving to Phase 01.
+
+Open questions:
+- None.

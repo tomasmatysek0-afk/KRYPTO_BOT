@@ -22,3 +22,18 @@ RUNBOOK starts with the command context catalog.
 
 Open questions:
 - None for Phase 00.
+
+### 2026-06-20 - Phase 00b command catalog
+Source:
+- CODEX_MASTER_PLAN.md
+- docs/EXECUTION_CONTEXT.md
+- scripts/dev.ps1
+
+Summary:
+Phase 00b introduces a Windows-first `scripts/dev.ps1` command catalog and keeps local Python commands under `[LOCAL_VENV]`.
+
+Decision impact:
+Docker commands are deferred to Phase 02; local package install, pytest, ruff, and CLI help run in the local venv.
+
+Open questions:
+- None.

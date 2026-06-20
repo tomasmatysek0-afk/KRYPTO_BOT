@@ -2,17 +2,17 @@
 
 ## Current Slice
 
-- Phase: 00 - Repository bootstrap, scope, AGENTS, LOG, docs/skills
+- Phase: 00b - Coding standards, package skeleton, pyproject, CLI baseline
 - State: DONE
 - Agent: architect-agent
-- Started: 2026-06-20 13:40
+- Started: 2026-06-20 13:50
 - Branch: main
-- Base commit: 40e7157
+- Base commit: 29eb61a
 
 ## Last PASS/FAIL
 
-- Last validation: 2026-06-20 13:43
-- Result: PASS - Phase 00 acceptance checks passed.
+- Last validation: 2026-06-20 14:00
+- Result: PASS - Phase 00b acceptance checks passed.
 
 ## Open Questions
 
@@ -25,36 +25,42 @@
 
 ## Files Changed In Current Slice
 
-- README.md
-- .gitignore
-- .env.example
-- AGENTS.md
+- pyproject.toml
+- Makefile
+- scripts/dev.ps1
+- requirements.lock
+- requirements-dev.lock
+- constraints.txt
+- src/coinbase_freqtrade_guarded_bot/**
+- tests/test_imports.py
+- tests/test_cli.py
+- docs/CODING_STANDARDS.md
+- docs/PACKAGING.md
+- docs/EXECUTION_CONTEXT.md
+- docs/NETWORK_RESILIENCE.md
+- docs/DB_SCHEMA_POLICY.md
+- docs/TEST_QUALITY_GATES.md
+- docs/CODEX_USAGE_POLICY.md
+- docs/skills/*.md
 - LOG.md
 - PROJECT_STATE.md
-- docs/ARCHITECTURE.md
-- docs/RISK_POLICY.md
-- docs/RUNBOOK.md
-- docs/PHASE_GATE.md
-- docs/LIVE_TRADING_CHECKLIST.md
-- docs/skills/*.md
-- logs/archive/.gitkeep
-- reports/*/.gitkeep
 
 ## Tests And Checks
 
-- PASS - required Phase 00 files exist.
-- PASS - README contains risk disclaimer and MVP no-live statement.
-- PASS - RISK_POLICY bans live trading, leverage, futures, shorts, and secrets.
-- PASS - Coinbase sandbox is marked unsuitable for strategy validation.
-- PASS - `.gitignore` excludes `.env`, `.venv`, DB files, logs, exports, cache folders, report CSV/Parquet/JSONL/XLSX files, Freqtrade runtime data, and KILL_SWITCH.
-- PASS - no obvious secret signatures found by repository smoke scan outside CODEX_MASTER_PLAN.md.
-- PASS - Git status reviewed; CODEX_MASTER_PLAN.md remains a pre-existing unstaged user change.
+- PASS - `[LOCAL_VENV] python -m pip install --upgrade pip`
+- PASS - `[LOCAL_VENV] python -m pip install -e .`
+- PASS - `[LOCAL_VENV] python -m coinbase_freqtrade_guarded_bot --help`
+- PASS - `[LOCAL_VENV] python -m pytest` (5 tests; pytest-socket default socket ban; pytest-cov configured)
+- PASS - `[LOCAL_VENV] ruff check .`
+- PASS - `[LOCAL_VENV] python -m pip check`
+- PASS - document completeness check for required Phase 00b docs/skills and phases 00-18
+- PASS - no-secret smoke scan
 
 ## Quota-Safe Resume Fields
 
-- Next deterministic command: `[HOST_POWERSHELL] git add README.md .gitignore .env.example AGENTS.md LOG.md PROJECT_STATE.md docs logs reports`
-- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; verify Phase 00 is DONE; commit and push Phase 00 if not already done; then continue Phase 00b.
-- Recommended commit message: `phase-00: bootstrap repository governance`
+- Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
+- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; verify Phase 00b is committed/pushed; continue Phase 01 environment verification.
+- Recommended commit message: `phase-00b: add package skeleton and CLI baseline`
 
 ## Risks
 

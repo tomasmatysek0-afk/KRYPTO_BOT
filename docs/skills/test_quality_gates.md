@@ -22,3 +22,18 @@ No pytest configuration is added in Phase 00.
 
 Open questions:
 - None for Phase 00.
+
+### 2026-06-20 - Phase 00b smoke gates
+Source:
+- CODEX_MASTER_PLAN.md
+- docs/TEST_QUALITY_GATES.md
+- pyproject.toml
+
+Summary:
+Phase 00b configures pytest, pytest-cov, pytest-socket default socket ban, and ruff.
+
+Decision impact:
+Import and CLI smoke tests are the required Phase 00b test scope. Global coverage fail-under is deferred until non-trivial application code exists.
+
+Open questions:
+- None.

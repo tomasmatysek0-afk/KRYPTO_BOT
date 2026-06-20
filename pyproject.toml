@@ -1,0 +1,82 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "coinbase-freqtrade-guarded-bot"
+version = "0.1.0"
+description = "Safe research, backtest, and dry-run tooling for Coinbase spot BTC/ETH strategies."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary/Internal research use" }
+authors = [
+  { name = "coinbase_freqtrade_guarded_bot maintainers" }
+]
+keywords = ["coinbase", "freqtrade", "backtesting", "dry-run", "risk"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Financial and Insurance Industry",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Office/Business :: Financial :: Investment",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "hatchling>=1.27,<2",
+  "pytest>=8.0,<9",
+  "pytest-cov>=6.0,<8",
+  "pytest-socket>=0.7,<1",
+  "ruff>=0.11,<1",
+]
+
+[project.urls]
+Repository = "https://github.com/tomasmatysek0-afk/KRYPTO_BOT"
+Documentation = "https://github.com/tomasmatysek0-afk/KRYPTO_BOT/tree/main/docs"
+Issues = "https://github.com/tomasmatysek0-afk/KRYPTO_BOT/issues"
+
+[project.scripts]
+cbot-data-parity = "coinbase_freqtrade_guarded_bot.cli:data_parity"
+cbot-backtest-report = "coinbase_freqtrade_guarded_bot.cli:backtest_report"
+cbot-dryrun-healthcheck = "coinbase_freqtrade_guarded_bot.cli:dryrun_healthcheck"
+cbot-tax-export = "coinbase_freqtrade_guarded_bot.cli:tax_export"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/coinbase_freqtrade_guarded_bot"]
+
+[tool.pytest.ini_options]
+addopts = [
+  "--strict-config",
+  "--strict-markers",
+  "--disable-socket",
+  "--cov=src",
+  "--cov-report=term-missing",
+]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = [
+  "integration: tests that may use external processes or services and are excluded from default unit intent",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["coinbase_freqtrade_guarded_bot"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
