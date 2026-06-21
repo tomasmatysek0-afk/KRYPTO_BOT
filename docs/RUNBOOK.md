@@ -137,6 +137,36 @@ docker compose run --rm freqtrade list-pairs --exchange coinbase --quote USD --p
 docker compose run --rm freqtrade --version
 ```
 
+## Phase 03b Local Mock Data Parity Checks
+
+These checks are valid in `NO_DOCKER_LOCAL_MODE`.
+
+```powershell
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest tests\test_data_parity.py
+
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest
+
+# [LOCAL_VENV]
+.\.venv\Scripts\ruff.exe check .
+
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe scripts\compare_coinbase_data_sources.py
+
+# [HOST_POWERSHELL]
+powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets
+```
+
+Local Phase 03b output:
+
+- `src/coinbase_freqtrade_guarded_bot/guard_layer/data_parity.py`;
+- `src/coinbase_freqtrade_guarded_bot/network/http_client.py`;
+- `tests/test_data_parity.py`;
+- `reports/data_parity/2026-06-21_mock_parity_report.md`.
+
+Local Phase 03b validates gate behavior with mock data only. Real Coinbase and Freqtrade/CCXT data parity remains deferred until data access and Docker/Freqtrade runtime checks are available.
+
 ## Deferred Docker Validation
 
 Status: `DEFERRED_DOCKER_REQUIRED`.

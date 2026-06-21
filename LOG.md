@@ -2,13 +2,13 @@
 
 ## STATUS SUMMARY
 
-Current phase: 03b - Data Parity Gate local/mock slice
+Current phase: 04 - Data source decision ADR local/provisional slice
 Active agent: data-agent
-Last update: 2026-06-21 11:49
+Last update: 2026-06-21 11:55
 State: TODO
 Current branch: main
-Current commit: 20ed2dd
-Note: Phase 03 local research is complete as `PARTIAL_RESEARCH_DOCKER_DEFERRED`. Docker/Freqtrade runtime checks remain `DEFERRED_DOCKER_REQUIRED`, not passed.
+Current commit: 21aa343
+Note: Phase 03b local/mock gate is complete as `LOCAL_MOCK_DONE_REAL_DATA_DEFERRED`. Real data/Docker parity remains deferred, not passed.
 
 ## OPEN QUESTIONS
 
@@ -23,8 +23,8 @@ Note: Phase 03 local research is complete as `PARTIAL_RESEARCH_DOCKER_DEFERRED`.
 | 01 | Development environment | DONE | 2026-06-21 | `NO_DOCKER_LOCAL_MODE` adopted; Docker criteria deferred, not passed. |
 | 02 | Freqtrade Docker skeleton | LOCAL_STATIC_DONE_DOCKER_DEFERRED | - | Portable files and local no-live tests pass; Docker runtime validation deferred, not passed. |
 | 03 | Coinbase/Freqtrade capability check | PARTIAL_RESEARCH_DOCKER_DEFERRED | - | CCXT Coinbase support documented; Freqtrade Coinbase runtime support unproven until Docker checks run. |
-| 03b | Data Parity Gate | TODO | - | Next safe local slice can design mocked/offline parity logic. |
-| 04 | Data source decision ADR | TODO | - | Not started. |
+| 03b | Data Parity Gate | LOCAL_MOCK_DONE_REAL_DATA_DEFERRED | - | Offline parity logic, report generation, and tests pass; real source parity deferred. |
+| 04 | Data source decision ADR | TODO | - | Next safe local slice can record provisional data-source policy and real-data gate requirement. |
 | 05 | Baseline strategy V1 | TODO | - | Not started. |
 | 05b | Minimal Guard Core | TODO | - | Not started. |
 | 06 | Advanced backtest validation | TODO | - | Not started. |
@@ -64,6 +64,81 @@ Note: Phase 03 local research is complete as `PARTIAL_RESEARCH_DOCKER_DEFERRED`.
 - None.
 
 ## ENTRIES
+
+### 2026-06-21 11:55 - Phase 03b - data-agent
+**Action:** Started Phase 03b as a local mocked/offline Data Parity Gate slice after Phase 03 commit `21aa343` was pushed to `origin/main`.
+**Files read:** CODEX_MASTER_PLAN.md Phase 03b section; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/DATA_SOURCE_POLICY.md; tests/test_no_live_execution.py; src package skeleton modules.
+**Files modified:** LOG.md; PROJECT_STATE.md.
+**Commands run:** `[HOST_POWERSHELL] git push origin main`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] git rev-parse --short HEAD`; `[HOST_POWERSHELL] Get-Date`; `[HOST_POWERSHELL] Get-Content`.
+**Tests:** Pending Phase 03b implementation.
+**Research:** Not required beyond Phase 03 sources; Phase 03b is local deterministic implementation with mocked data.
+**Decision:** Implement parity logic and HTTP retry behavior offline. Do not call Coinbase, CCXT, Freqtrade, Docker, or any private endpoint.
+**Result:** PARTIAL
+**Next step:** Add typed data parity module, network HTTP retry client, mock comparison script, tests, data parity report, and docs updates.
+
+### CHECKPOINT - 2026-06-21 11:55 - Phase 03b
+State: IN_PROGRESS
+Done: Phase 03b scope selected; current commit corrected to `21aa343`.
+In progress: Implementing offline parity logic.
+Files changed since last checkpoint: LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Real Coinbase/Freqtrade parity cannot be measured until data is available; this slice only implements deterministic gate behavior with mocks.
+Next safe step: Add data parity and HTTP retry modules with deterministic unit tests.
+
+### CHECKPOINT - 2026-06-21 11:55 - Phase 03b
+State: IN_PROGRESS
+Done: Added data parity module, bounded retry HTTP client, mock report script, mock parity report, and deterministic tests.
+In progress: Local validation.
+Files changed since last checkpoint: src/coinbase_freqtrade_guarded_bot/guard_layer/data_parity.py; src/coinbase_freqtrade_guarded_bot/network/http_client.py; src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py; src/coinbase_freqtrade_guarded_bot/network/__init__.py; scripts/compare_coinbase_data_sources.py; reports/data_parity/2026-06-21_mock_parity_report.md; tests/test_data_parity.py; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Local tests prove gate behavior only; real source parity remains unavailable without data and Docker/runtime checks.
+Next safe step: `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_data_parity.py`
+
+### CHECKPOINT - 2026-06-21 11:55 - Phase 03b
+State: IN_PROGRESS
+Done: Targeted Phase 03b tests pass; critical data parity module coverage is 99% and HTTP client coverage is 97%; DATA_SOURCE_POLICY.md and RUNBOOK.md document the local mock gate.
+In progress: Full validation.
+Files changed since last checkpoint: src/coinbase_freqtrade_guarded_bot/guard_layer/data_parity.py; src/coinbase_freqtrade_guarded_bot/network/http_client.py; src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py; src/coinbase_freqtrade_guarded_bot/network/__init__.py; scripts/compare_coinbase_data_sources.py; reports/data_parity/2026-06-21_mock_parity_report.md; tests/test_data_parity.py; docs/DATA_SOURCE_POLICY.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: Targeted `tests/test_data_parity.py` PASS with 24 tests after ruff import-order fix.
+Identified risks: Real data parity report remains deferred until data access is implemented and Freqtrade/Docker checks are available.
+Next safe step: `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`
+
+### 2026-06-21 11:55 - Phase 03b - data-agent
+**Action:** Completed Phase 03b local mocked/offline Data Parity Gate implementation.
+**Files read:** CODEX_MASTER_PLAN.md Phase 03b section; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/DATA_SOURCE_POLICY.md; tests/test_no_live_execution.py; src package skeleton modules.
+**Files modified:** src/coinbase_freqtrade_guarded_bot/guard_layer/data_parity.py; src/coinbase_freqtrade_guarded_bot/network/http_client.py; src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py; src/coinbase_freqtrade_guarded_bot/network/__init__.py; scripts/compare_coinbase_data_sources.py; reports/data_parity/2026-06-21_mock_parity_report.md; tests/test_data_parity.py; docs/DATA_SOURCE_POLICY.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+**Commands run:** `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_data_parity.py`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check .`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check src\coinbase_freqtrade_guarded_bot\guard_layer\data_parity.py --fix`; `[LOCAL_VENV] .\.venv\Scripts\python.exe scripts\compare_coinbase_data_sources.py`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pip check`; `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`; `[HOST_POWERSHELL] git diff --check`; `[HOST_POWERSHELL] git diff --stat`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] rg -n "LOCAL_MOCK_DONE_REAL_DATA_DEFERRED|missing_candidate_candle|shifted_timestamp|ohlc_mismatch|volume_mismatch|Retry-After|429|503|timeout|Status: PASS"`.
+**Tests:** PASS - targeted data parity tests 24 tests; PASS - full pytest 34 tests; PASS - ruff; PASS - pip check; PASS - no-secret scan; PASS - git diff --check with line-ending warnings only. Full coverage is 96%; data parity module 99%; HTTP client 97%.
+**Research:** No new research required. Implementation follows Phase 03 findings and project network resilience policy.
+**Decision:** Local gate behavior is implemented and tested with mocks. Real Coinbase Advanced vs Freqtrade/CCXT parity remains `DEFERRED_DOCKER_REQUIRED` / data-runtime deferred and must not be treated as passed.
+**Result:** PARTIAL
+**Next step:** Commit and push `phase-03b: add offline data parity gate`; then continue Phase 04 with a provisional data-source ADR that explicitly blocks final strategy validation until real data parity runs.
+
+### CHECKPOINT - 2026-06-21 11:55 - Phase 03b
+State: LOCAL_MOCK_DONE_REAL_DATA_DEFERRED
+Done: Offline parity models, comparison, 4h aggregation, markdown report generation, bounded HTTP retry client, mock report script, and deterministic tests pass.
+In progress: Commit and push pending.
+Files changed since last checkpoint: src/coinbase_freqtrade_guarded_bot/guard_layer/data_parity.py; src/coinbase_freqtrade_guarded_bot/network/http_client.py; src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py; src/coinbase_freqtrade_guarded_bot/network/__init__.py; scripts/compare_coinbase_data_sources.py; reports/data_parity/2026-06-21_mock_parity_report.md; tests/test_data_parity.py; docs/DATA_SOURCE_POLICY.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: New data parity module, HTTP client, mock report script/report, test_data_parity.py; updated runbook, data source policy, package exports, log, and state.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: targeted data parity PASS; full pytest PASS; ruff PASS; pip check PASS; no-secret scan PASS; diff check PASS with line-ending warnings only.
+Identified risks: Real data-source parity is not proven; do not proceed to real strategy validation until real Coinbase/Freqtrade data checks run.
+Next safe step: `[HOST_POWERSHELL] git add src/coinbase_freqtrade_guarded_bot/guard_layer/data_parity.py src/coinbase_freqtrade_guarded_bot/network/http_client.py src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py src/coinbase_freqtrade_guarded_bot/network/__init__.py scripts/compare_coinbase_data_sources.py reports/data_parity/2026-06-21_mock_parity_report.md tests/test_data_parity.py docs/DATA_SOURCE_POLICY.md docs/RUNBOOK.md LOG.md PROJECT_STATE.md`
+
+### QUOTA_SAFE_CHECKPOINT - 2026-06-21 11:55 - Phase 03b
+Current slice: Offline Data Parity Gate in `NO_DOCKER_LOCAL_MODE`.
+Files changed: src/coinbase_freqtrade_guarded_bot/guard_layer/data_parity.py; src/coinbase_freqtrade_guarded_bot/network/http_client.py; src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py; src/coinbase_freqtrade_guarded_bot/network/__init__.py; scripts/compare_coinbase_data_sources.py; reports/data_parity/2026-06-21_mock_parity_report.md; tests/test_data_parity.py; docs/DATA_SOURCE_POLICY.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Tests run: targeted data parity; full pytest; ruff; pip check; no-secret scan; git diff --check.
+Git status: Pending final check before commit.
+Recommended commit message: `phase-03b: add offline data parity gate`
+Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
+Resume instructions: Read CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, and PROJECT_STATE.md; commit/push Phase 03b if needed; then continue Phase 04 with a provisional ADR that preserves the real-data parity gate.
 
 ### 2026-06-21 11:49 - Phase 03 - data-agent
 **Action:** Started Phase 03 as a local research/documentation slice after Phase 02 commit `20ed2dd` was pushed to `origin/main`.

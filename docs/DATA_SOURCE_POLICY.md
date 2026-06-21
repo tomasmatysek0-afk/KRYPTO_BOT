@@ -99,6 +99,43 @@ Before strategy validation, Phase 03b must compare candidate data sources for:
 
 If Freqtrade/CCXT Coinbase data differs materially from Coinbase Advanced Trade data, prefer Coinbase Advanced Trade as authoritative data and use Freqtrade as the research/backtest engine only after conversion and parity checks.
 
+## Phase 03b Local Gate Implementation
+
+Local status: `LOCAL_MOCK_DONE_REAL_DATA_DEFERRED`.
+
+The project now has deterministic offline parity primitives in `src/coinbase_freqtrade_guarded_bot/guard_layer/data_parity.py`.
+
+Implemented local behavior:
+
+- only BTC/USD and ETH/USD are accepted;
+- Coinbase product mapping is explicit: `BTC/USD` -> `BTC-USD`, `ETH/USD` -> `ETH-USD`;
+- only 1h, 4h, and 1d timeframes are accepted;
+- all candle timestamps are normalized to UTC;
+- unclosed candles are ignored before comparison;
+- missing candles fail;
+- shifted timestamps fail;
+- duplicate timestamps fail;
+- OHLC differences above configured tolerance fail;
+- volume differences can warn or fail according to config;
+- 1h candles can be deterministically aggregated to complete 4h candles;
+- incomplete 4h groups are not interpolated;
+- markdown reports can be rendered and written.
+
+The network layer now has an injected-transport HTTP client with deterministic tests for:
+
+- HTTP 429 retry handling;
+- `Retry-After` handling;
+- HTTP 503 retry handling;
+- timeout retry handling;
+- retry exhaustion.
+
+Still deferred:
+
+- real Coinbase Advanced Trade data download;
+- Freqtrade/CCXT data download;
+- Docker/Freqtrade `list-exchanges`, `list-pairs`, and version checks;
+- real data parity report using live market data.
+
 ## Do Not Implement
 
 - Do not use Coinbase sandbox as a strategy validation source.

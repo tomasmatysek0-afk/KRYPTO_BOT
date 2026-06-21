@@ -2,19 +2,19 @@
 
 ## Current Slice
 
-- Phase: 03b - Data Parity Gate local/mock slice
+- Phase: 04 - Data source decision ADR local/provisional slice
 - State: TODO
-- Agent: data-agent
-- Started: 2026-06-21 11:49
+- Agent: architect-agent + data-agent
+- Started: 2026-06-21 11:55
 - Branch: main
-- Base commit: 20ed2dd
+- Base commit: 21aa343
 - Current mode: `NO_DOCKER_LOCAL_MODE`
 - Docker status: `DEFERRED_DOCKER_REQUIRED`
 
 ## Last PASS/FAIL
 
-- Last validation: 2026-06-21 11:49
-- Result: PARTIAL - Phase 03 local research completed; Freqtrade Coinbase runtime checks are `DEFERRED_DOCKER_REQUIRED`, not passed.
+- Last validation: 2026-06-21 11:55
+- Result: PARTIAL - Phase 03b local/mock Data Parity Gate completed; real data parity remains deferred, not passed.
 - Current decision: local work continues without Docker; Docker-dependent acceptance criteria are deferred, not passed.
 
 ## Open Questions
@@ -32,13 +32,13 @@
 
 ## Next Safe Local Phase
 
-- Phase 03b can proceed as local mocked/offline Data Parity Gate design.
-- Allowed locally: create typed data models, pair mapping rules, deterministic validation functions, mocked candle fixtures, and unit tests.
+- Phase 04 can proceed as a provisional local ADR.
+- Allowed locally: document the provisional data-source decision and explicitly block final strategy validation until real Coinbase/Freqtrade parity checks run.
 - Deferred: Docker Compose validation, Freqtrade container execution, Docker import smoke tests, and Freqtrade dry-run runtime.
 
 ## Files Changed In Current Slice
 
-- None yet for Phase 03b.
+- None yet for Phase 04.
 
 ## Tests And Checks
 
@@ -53,6 +53,8 @@
 - DEFERRED_DOCKER_REQUIRED - `[DOCKER_FREQTRADE] docker compose run --rm freqtrade list-exchanges`
 - DEFERRED_DOCKER_REQUIRED - `[DOCKER_FREQTRADE] docker compose run --rm freqtrade list-pairs --exchange coinbase --quote USD --print-json`
 - DEFERRED_DOCKER_REQUIRED - `[DOCKER_FREQTRADE] docker compose run --rm freqtrade --version`
+- PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_data_parity.py`
+- PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe scripts\compare_coinbase_data_sources.py`
 
 ## Future Docker-Capable Resume Instructions
 
@@ -80,11 +82,12 @@ Then verify Docker package import, Freqtrade strategy import without `sys.path.a
 ## Quota-Safe Resume Fields
 
 - Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
-- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; commit/push Phase 03 if needed; then continue Phase 03b with local mocked/offline Data Parity Gate design.
-- Recommended commit message: `phase-03: document coinbase freqtrade capability`
+- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; commit/push Phase 03b if needed; then continue Phase 04 with a provisional data-source ADR that preserves the real-data parity gate.
+- Recommended commit message: `phase-03b: add offline data parity gate`
 
 ## Risks
 
 - Docker/Freqtrade runtime behavior remains unvalidated locally.
 - Phase 03 is only `PARTIAL_RESEARCH_DOCKER_DEFERRED` until Docker list-exchanges/list-pairs/version checks run.
+- Phase 03b is only `LOCAL_MOCK_DONE_REAL_DATA_DEFERRED` until real Coinbase/Freqtrade data parity runs.
 - Docker deferral must not weaken no-live-trading, no-secrets, audit, guard, or kill-switch requirements.
