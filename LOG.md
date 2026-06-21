@@ -2,13 +2,13 @@
 
 ## STATUS SUMMARY
 
-Current phase: 03 - Coinbase/Freqtrade capability check local research slice
-Active agent: sre-agent + architect-agent
-Last update: 2026-06-21 11:43
+Current phase: 03b - Data Parity Gate local/mock slice
+Active agent: data-agent
+Last update: 2026-06-21 11:49
 State: TODO
 Current branch: main
-Current commit: 46eba0b
-Note: Phase 02 local/static skeleton is complete. Docker/Freqtrade runtime checks remain `DEFERRED_DOCKER_REQUIRED`, not passed.
+Current commit: 20ed2dd
+Note: Phase 03 local research is complete as `PARTIAL_RESEARCH_DOCKER_DEFERRED`. Docker/Freqtrade runtime checks remain `DEFERRED_DOCKER_REQUIRED`, not passed.
 
 ## OPEN QUESTIONS
 
@@ -22,8 +22,8 @@ Note: Phase 02 local/static skeleton is complete. Docker/Freqtrade runtime check
 | 00b | Coding standards and package skeleton | DONE | 2026-06-20 | Package skeleton, CLI, tooling, docs, locks, and smoke tests complete. |
 | 01 | Development environment | DONE | 2026-06-21 | `NO_DOCKER_LOCAL_MODE` adopted; Docker criteria deferred, not passed. |
 | 02 | Freqtrade Docker skeleton | LOCAL_STATIC_DONE_DOCKER_DEFERRED | - | Portable files and local no-live tests pass; Docker runtime validation deferred, not passed. |
-| 03 | Coinbase/Freqtrade capability check | TODO | - | Next safe local research slice. |
-| 03b | Data Parity Gate | TODO | - | Not started. |
+| 03 | Coinbase/Freqtrade capability check | PARTIAL_RESEARCH_DOCKER_DEFERRED | - | CCXT Coinbase support documented; Freqtrade Coinbase runtime support unproven until Docker checks run. |
+| 03b | Data Parity Gate | TODO | - | Next safe local slice can design mocked/offline parity logic. |
 | 04 | Data source decision ADR | TODO | - | Not started. |
 | 05 | Baseline strategy V1 | TODO | - | Not started. |
 | 05b | Minimal Guard Core | TODO | - | Not started. |
@@ -64,6 +64,70 @@ Note: Phase 02 local/static skeleton is complete. Docker/Freqtrade runtime check
 - None.
 
 ## ENTRIES
+
+### 2026-06-21 11:49 - Phase 03 - data-agent
+**Action:** Started Phase 03 as a local research/documentation slice after Phase 02 commit `20ed2dd` was pushed to `origin/main`.
+**Files read:** CODEX_MASTER_PLAN.md Phase 03 section; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/RUNBOOK.md; docs/skills/freqtrade_coinbase_ccxt.md; pyproject.toml; scripts/dev.ps1; tests/test_cli.py; tests/test_imports.py.
+**Files modified:** LOG.md; PROJECT_STATE.md.
+**Commands run:** `[HOST_POWERSHELL] git push origin main`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] git rev-parse --short HEAD`; `[HOST_POWERSHELL] Get-Date`; `[HOST_POWERSHELL] Get-Content`; `[HOST_POWERSHELL] Test-Path docs/DATA_SOURCE_POLICY.md`.
+**Tests:** Pending Phase 03 documentation validation.
+**Research:** In progress. Required sources: current Freqtrade docs/issues, CCXT Coinbase support, Coinbase product/pair naming, OHLCV/fetch limits, timestamp and volume behavior.
+**Decision:** Phase 03 will not run Docker commands locally. Docker checks `list-exchanges`, `list-pairs`, and `--version` remain `DEFERRED_DOCKER_REQUIRED`.
+**Result:** PARTIAL
+**Next step:** Complete targeted research and write `reports/research/2026-06-21_coinbase_freqtrade_capability.md`, `docs/DATA_SOURCE_POLICY.md`, docs skill update, runbook update, LOG, and PROJECT_STATE.
+
+### CHECKPOINT - 2026-06-21 11:49 - Phase 03
+State: IN_PROGRESS
+Done: Phase 03 scope selected; current commit corrected to `20ed2dd`.
+In progress: Source research.
+Files changed since last checkpoint: LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Without Docker, Freqtrade runtime support cannot be proven locally.
+Next safe step: Research official Freqtrade, CCXT, Coinbase, and Freqtrade GitHub issue sources.
+
+### CHECKPOINT - 2026-06-21 11:49 - Phase 03
+State: IN_PROGRESS
+Done: Wrote Phase 03 research report, data source policy, skill update, and runbook update.
+In progress: Local validation.
+Files changed since last checkpoint: docs/DATA_SOURCE_POLICY.md; reports/research/2026-06-21_coinbase_freqtrade_capability.md; docs/skills/freqtrade_coinbase_ccxt.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`; web research using official Freqtrade, CCXT, Coinbase, and Freqtrade GitHub sources.
+Tests: Pending.
+Identified risks: Freqtrade Coinbase remains unverified until Docker runtime checks run.
+Next safe step: `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`
+
+### 2026-06-21 11:49 - Phase 03 - data-agent
+**Action:** Completed Phase 03 local Coinbase/Freqtrade capability research.
+**Files read:** CODEX_MASTER_PLAN.md Phase 03 section; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/RUNBOOK.md; docs/skills/freqtrade_coinbase_ccxt.md; official Freqtrade docs/repository/issue sources; official CCXT docs; official Coinbase Advanced Trade and Exchange API docs.
+**Files modified:** docs/DATA_SOURCE_POLICY.md; reports/research/2026-06-21_coinbase_freqtrade_capability.md; docs/skills/freqtrade_coinbase_ccxt.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+**Commands run:** `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check .`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pip check`; `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`; `[HOST_POWERSHELL] git diff --check`; `[HOST_POWERSHELL] git diff --stat`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] rg -n "PARTIAL_RESEARCH_DOCKER_DEFERRED|BTC-USD|BTC/USD|fetchOHLCV|DEFERRED_DOCKER_REQUIRED|Data Parity"`.
+**Tests:** PASS - full pytest 10 tests; PASS - ruff; PASS - pip check; PASS - no-secret scan; PASS - git diff --check with line-ending warnings only.
+**Research:** PASS - report written. Main conclusion: CCXT documents Coinbase `fetchMarkets`/`fetchOHLCV`, but Freqtrade does not guarantee Coinbase support and a Coinbase Advanced issue was closed as not planned/unsupported; runtime checks remain deferred.
+**Decision:** Use `PARTIAL_RESEARCH_DOCKER_DEFERRED`. Treat Coinbase Advanced Trade as candidate authoritative candle source if Data Parity Gate finds Freqtrade/CCXT mismatch. Validate `BTC/USD` <-> `BTC-USD` and `ETH/USD` <-> `ETH-USD` mapping in Phase 03b.
+**Result:** PARTIAL
+**Next step:** Commit and push `phase-03: document coinbase freqtrade capability`; continue Phase 03b local/mock Data Parity Gate design.
+
+### CHECKPOINT - 2026-06-21 11:49 - Phase 03
+State: PARTIAL_RESEARCH_DOCKER_DEFERRED
+Done: Research report, data source policy, skill update, runbook update, and local validation complete.
+In progress: Commit and push pending.
+Files changed since last checkpoint: docs/DATA_SOURCE_POLICY.md; reports/research/2026-06-21_coinbase_freqtrade_capability.md; docs/skills/freqtrade_coinbase_ccxt.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: New data source policy and research report; runbook/skill/log/state updated.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`, web research.
+Tests: pytest PASS; ruff PASS; pip check PASS; no-secret scan PASS; diff check PASS with line-ending warnings only.
+Identified risks: Freqtrade Coinbase runtime support, pair availability, and order book behavior are not proven until Docker checks run.
+Next safe step: `[HOST_POWERSHELL] git add docs/DATA_SOURCE_POLICY.md reports/research/2026-06-21_coinbase_freqtrade_capability.md docs/skills/freqtrade_coinbase_ccxt.md docs/RUNBOOK.md LOG.md PROJECT_STATE.md`
+
+### QUOTA_SAFE_CHECKPOINT - 2026-06-21 11:49 - Phase 03
+Current slice: Coinbase/Freqtrade capability research in `NO_DOCKER_LOCAL_MODE`.
+Files changed: docs/DATA_SOURCE_POLICY.md; reports/research/2026-06-21_coinbase_freqtrade_capability.md; docs/skills/freqtrade_coinbase_ccxt.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Tests run: full pytest; ruff; pip check; no-secret scan; git diff --check.
+Git status: Pending final check before commit.
+Recommended commit message: `phase-03: document coinbase freqtrade capability`
+Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
+Resume instructions: Read CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, and PROJECT_STATE.md; commit/push Phase 03 if needed; then continue Phase 03b with local mocked/offline Data Parity Gate design. Do not mark Docker runtime checks passed until a Docker-capable environment runs them.
 
 ### 2026-06-21 11:43 - Phase 02 - architect-agent + sre-agent
 **Action:** Started Phase 02 as a `NO_DOCKER_LOCAL_MODE` local/static slice after Phase 01 no-Docker mode commit `46eba0b` was pushed to `origin/main`.

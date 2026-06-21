@@ -92,6 +92,51 @@ The local tests verify:
 - Docker Compose uses relative repository mounts;
 - no public port is exposed.
 
+## Phase 03 Local Research Checks
+
+These checks are valid in `NO_DOCKER_LOCAL_MODE`.
+
+```powershell
+# [HOST_POWERSHELL]
+git status --short --branch
+
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest
+
+# [LOCAL_VENV]
+.\.venv\Scripts\ruff.exe check .
+
+# [HOST_POWERSHELL]
+powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets
+```
+
+Phase 03 research output:
+
+- `reports/research/2026-06-21_coinbase_freqtrade_capability.md`;
+- `docs/DATA_SOURCE_POLICY.md`;
+- `docs/skills/freqtrade_coinbase_ccxt.md`.
+
+Local conclusion:
+
+- CCXT documents Coinbase market/OHLCV methods.
+- Freqtrade Coinbase support is not locally proven.
+- Coinbase product IDs use dash notation such as `BTC-USD`.
+- Freqtrade/CCXT pair candidates use slash notation such as `BTC/USD`.
+- Coinbase Advanced Trade candle data is the candidate authoritative source if Data Parity Gate finds Freqtrade/CCXT mismatch.
+
+Deferred Docker checks for Phase 03:
+
+```powershell
+# [DOCKER_FREQTRADE]
+docker compose run --rm freqtrade list-exchanges
+
+# [DOCKER_FREQTRADE]
+docker compose run --rm freqtrade list-pairs --exchange coinbase --quote USD --print-json
+
+# [DOCKER_FREQTRADE]
+docker compose run --rm freqtrade --version
+```
+
 ## Deferred Docker Validation
 
 Status: `DEFERRED_DOCKER_REQUIRED`.
