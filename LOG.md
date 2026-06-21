@@ -2,13 +2,13 @@
 
 ## STATUS SUMMARY
 
-Current phase: 02 - Freqtrade Docker skeleton local/static slice
+Current phase: 03 - Coinbase/Freqtrade capability check local research slice
 Active agent: sre-agent + architect-agent
-Last update: 2026-06-21 11:39
+Last update: 2026-06-21 11:43
 State: TODO
 Current branch: main
-Current commit: ccee38a
-Note: Phase 01 no-Docker policy update is complete locally. Docker-dependent acceptance criteria are `DEFERRED_DOCKER_REQUIRED`, not passed.
+Current commit: 46eba0b
+Note: Phase 02 local/static skeleton is complete. Docker/Freqtrade runtime checks remain `DEFERRED_DOCKER_REQUIRED`, not passed.
 
 ## OPEN QUESTIONS
 
@@ -21,8 +21,8 @@ Note: Phase 01 no-Docker policy update is complete locally. Docker-dependent acc
 | 00 | Repository bootstrap | DONE | 2026-06-20 | Restartable skeleton, policy docs, ignore rules, and skill stubs created. |
 | 00b | Coding standards and package skeleton | DONE | 2026-06-20 | Package skeleton, CLI, tooling, docs, locks, and smoke tests complete. |
 | 01 | Development environment | DONE | 2026-06-21 | `NO_DOCKER_LOCAL_MODE` adopted; Docker criteria deferred, not passed. |
-| 02 | Freqtrade Docker skeleton | TODO | - | Next safe local slice can create portable/static files; Docker runtime validation deferred. |
-| 03 | Coinbase/Freqtrade capability check | TODO | - | Not started. |
+| 02 | Freqtrade Docker skeleton | LOCAL_STATIC_DONE_DOCKER_DEFERRED | - | Portable files and local no-live tests pass; Docker runtime validation deferred, not passed. |
+| 03 | Coinbase/Freqtrade capability check | TODO | - | Next safe local research slice. |
 | 03b | Data Parity Gate | TODO | - | Not started. |
 | 04 | Data source decision ADR | TODO | - | Not started. |
 | 05 | Baseline strategy V1 | TODO | - | Not started. |
@@ -64,6 +64,70 @@ Note: Phase 01 no-Docker policy update is complete locally. Docker-dependent acc
 - None.
 
 ## ENTRIES
+
+### 2026-06-21 11:43 - Phase 02 - architect-agent + sre-agent
+**Action:** Started Phase 02 as a `NO_DOCKER_LOCAL_MODE` local/static slice after Phase 01 no-Docker mode commit `46eba0b` was pushed to `origin/main`.
+**Files read:** CODEX_MASTER_PLAN.md; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/RUNBOOK.md; pyproject.toml; scripts/dev.ps1; tests/test_cli.py; tests/test_imports.py; repository file list.
+**Files modified:** LOG.md; PROJECT_STATE.md.
+**Commands run:** `[HOST_POWERSHELL] git push origin main`; `[HOST_POWERSHELL] git rev-parse --short HEAD`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] Get-Date`; `[HOST_POWERSHELL] rg --files user_data docs tests src`.
+**Tests:** Pending Phase 02 local/static validation.
+**Research:** Not required. Docker runtime validation is explicitly deferred by ADR-005.
+**Decision:** Create portable Docker/Freqtrade skeleton files and local no-live/static tests only. Do not run Docker, Docker Compose, or Freqtrade container commands locally.
+**Result:** PARTIAL
+**Next step:** Add `docker-compose.yml`, Freqtrade dry-run/backtest config, pairlist, no-live static tests, and runbook updates.
+
+### CHECKPOINT - 2026-06-21 11:43 - Phase 02
+State: IN_PROGRESS
+Done: Phase 01 no-Docker mode commit pushed; Phase 02 local/static scope selected.
+In progress: Creating portable skeleton files.
+Files changed since last checkpoint: LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Docker/Freqtrade runtime checks cannot be run locally and must remain deferred, not passed.
+Next safe step: Add Phase 02 skeleton files using portable relative paths.
+
+### CHECKPOINT - 2026-06-21 11:43 - Phase 02
+State: IN_PROGRESS
+Done: Added portable Docker Compose skeleton, dry-run/backtest Freqtrade JSON configs, BTC/ETH static pairlist, Phase 02 no-live static tests, and runbook commands.
+In progress: Local validation.
+Files changed since last checkpoint: docker-compose.yml; user_data/config/config.dryrun.json; user_data/config/config.backtest.json; user_data/config/pairlist.json; tests/test_no_live_execution.py; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Docker Compose config validation and Freqtrade container execution remain `DEFERRED_DOCKER_REQUIRED`.
+Next safe step: `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_no_live_execution.py`
+
+### 2026-06-21 11:43 - Phase 02 - architect-agent + sre-agent
+**Action:** Completed the local/static portion of Phase 02 in `NO_DOCKER_LOCAL_MODE`.
+**Files read:** CODEX_MASTER_PLAN.md; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/RUNBOOK.md; pyproject.toml; scripts/dev.ps1; tests/test_cli.py; tests/test_imports.py; official Freqtrade configuration, Docker quickstart, pairlist, and leverage/spot documentation.
+**Files modified:** docker-compose.yml; user_data/config/config.dryrun.json; user_data/config/config.backtest.json; user_data/config/pairlist.json; tests/test_no_live_execution.py; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+**Commands run:** `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_no_live_execution.py`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check .`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pip check`; `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check tests\test_no_live_execution.py --fix`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`; `[HOST_POWERSHELL] git diff --stat`; `[HOST_POWERSHELL] git diff --check`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] rg -n "dry_run|trading_mode|margin_mode|BTC/USD|ETH/USD|DEFERRED_DOCKER_REQUIRED|ports:|sys.path"`.
+**Tests:** Initial targeted pytest PASS; initial ruff FAIL for import ordering; ruff auto-fix PASS; targeted pytest PASS; full pytest PASS with 10 tests; ruff PASS; pip check PASS; no-secret scan PASS; git diff --check PASS with line-ending warnings only. Final validation after LOG/PROJECT_STATE updates also PASS for full pytest, ruff, pip check, no-secret scan, and git diff --check.
+**Research:** Checked official Freqtrade docs for JSON config files, dry-run behavior, Docker relative-directory usage, StaticPairList, and `trading_mode=spot` long-only/no-leverage behavior.
+**Decision:** Keep `docker-compose.yml` portable with relative mounts and no public ports. Keep configs dry-run, spot, USD quote, BTC/USD and ETH/USD only, no credential fields, API server disabled, Telegram disabled, and initial state stopped.
+**Result:** PARTIAL
+**Next step:** Commit and push `phase-02: add portable freqtrade skeleton`; then continue Phase 03 local research. Docker Compose validation, Freqtrade container startup, Docker package import smoke test, and Docker dry-run remain `DEFERRED_DOCKER_REQUIRED`.
+
+### CHECKPOINT - 2026-06-21 11:43 - Phase 02
+State: LOCAL_STATIC_DONE_DOCKER_DEFERRED
+Done: Portable Docker/Freqtrade skeleton files and local no-live/static tests pass.
+In progress: Commit and push pending.
+Files changed since last checkpoint: docker-compose.yml; user_data/config/config.dryrun.json; user_data/config/config.backtest.json; user_data/config/pairlist.json; tests/test_no_live_execution.py; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: New docker-compose.yml, user_data/config JSON files, test_no_live_execution.py; docs/RUNBOOK.md, LOG.md, and PROJECT_STATE.md updated.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: Targeted pytest PASS; full pytest PASS; ruff PASS after import-order fix; pip check PASS; no-secret scan PASS; diff check PASS with line-ending warnings only. Final validation after LOG/PROJECT_STATE updates also PASS for full pytest, ruff, pip check, no-secret scan, and git diff --check.
+Identified risks: Docker-dependent acceptance criteria remain deferred and are not passed.
+Next safe step: `[HOST_POWERSHELL] git add docker-compose.yml user_data/config/config.dryrun.json user_data/config/config.backtest.json user_data/config/pairlist.json tests/test_no_live_execution.py docs/RUNBOOK.md LOG.md PROJECT_STATE.md`
+
+### QUOTA_SAFE_CHECKPOINT - 2026-06-21 11:43 - Phase 02
+Current slice: Phase 02 portable Freqtrade Docker skeleton in `NO_DOCKER_LOCAL_MODE`.
+Files changed: docker-compose.yml; user_data/config/config.dryrun.json; user_data/config/config.backtest.json; user_data/config/pairlist.json; tests/test_no_live_execution.py; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Tests run: targeted pytest; full pytest; ruff; pip check; no-secret scan; git diff --check; final full validation after LOG/PROJECT_STATE updates.
+Git status: Pending final check before commit.
+Recommended commit message: `phase-02: add portable freqtrade skeleton`
+Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
+Resume instructions: Read CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, and PROJECT_STATE.md; commit/push the Phase 02 local/static slice if needed; then start Phase 03 as local research. Do not mark Docker criteria passed until a Docker-capable environment runs them.
 
 ### 2026-06-21 11:39 - Phase 01 - sre-agent + architect-agent
 **Action:** Began adopting `NO_DOCKER_LOCAL_MODE` after reading CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, PROJECT_STATE.md, docs/RUNBOOK.md, and the attached user request. Confirmed Docker/WSL absence is no longer a local blocker and Docker-dependent criteria must be deferred rather than passed.

@@ -62,6 +62,36 @@ powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets
 
 Local unit tests must remain offline by default. Tests that need network access must be explicitly marked as integration tests and must not run in the default command.
 
+## Phase 02 Local Static Checks
+
+These checks are valid in `NO_DOCKER_LOCAL_MODE`.
+
+```powershell
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest tests\test_no_live_execution.py
+
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest
+
+# [LOCAL_VENV]
+.\.venv\Scripts\ruff.exe check .
+
+# [HOST_POWERSHELL]
+powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets
+```
+
+The local tests verify:
+
+- Freqtrade config files are JSON;
+- `dry_run=true`;
+- `trading_mode=spot`;
+- no futures, margin, leverage, or shorts;
+- Coinbase pair whitelist is BTC/USD and ETH/USD only;
+- API server and Telegram are disabled;
+- no API credential fields are present;
+- Docker Compose uses relative repository mounts;
+- no public port is exposed.
+
 ## Deferred Docker Validation
 
 Status: `DEFERRED_DOCKER_REQUIRED`.

@@ -2,19 +2,19 @@
 
 ## Current Slice
 
-- Phase: 02 - Freqtrade Docker skeleton local/static slice
+- Phase: 03 - Coinbase/Freqtrade capability check local research slice
 - State: TODO
-- Agent: sre-agent + architect-agent
-- Started: 2026-06-21 11:39
+- Agent: data-agent
+- Started: 2026-06-21 11:43
 - Branch: main
-- Base commit: ccee38a
+- Base commit: 46eba0b
 - Current mode: `NO_DOCKER_LOCAL_MODE`
 - Docker status: `DEFERRED_DOCKER_REQUIRED`
 
 ## Last PASS/FAIL
 
-- Last validation: 2026-06-21 11:39
-- Result: PASS - local pytest, ruff, pip check, no-secret scan, and diff check passed for the no-Docker documentation/state slice.
+- Last validation: 2026-06-21 11:43
+- Result: PASS - Phase 02 local/static checks passed; Docker-dependent checks are `DEFERRED_DOCKER_REQUIRED`, not passed.
 - Current decision: local work continues without Docker; Docker-dependent acceptance criteria are deferred, not passed.
 
 ## Open Questions
@@ -32,13 +32,13 @@
 
 ## Next Safe Local Phase
 
-- Phase 02 can proceed only as a portable/static/offline Docker skeleton slice.
-- Allowed locally: create and test safe config files, no-live checks, import-policy checks, documentation, and local package tests.
+- Phase 03 can proceed as local research and documentation.
+- Allowed locally: verify current Coinbase/Freqtrade/CCXT capability from official sources, document findings, update runbook/data-source policy notes, and keep all tests offline by default.
 - Deferred: Docker Compose validation, Freqtrade container execution, Docker import smoke tests, and Freqtrade dry-run runtime.
 
 ## Files Changed In Current Slice
 
-- None yet for the next Phase 02 local/static slice.
+- None yet for Phase 03.
 
 ## Tests And Checks
 
@@ -47,6 +47,9 @@
 - PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pip check`
 - PASS - `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`
 - PASS - `[HOST_POWERSHELL] git diff --check` with line-ending warnings only.
+- PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_no_live_execution.py`
+- DEFERRED_DOCKER_REQUIRED - `[HOST_POWERSHELL] docker compose config`
+- DEFERRED_DOCKER_REQUIRED - `[DOCKER_FREQTRADE] docker compose run --rm freqtrade --help`
 
 ## Future Docker-Capable Resume Instructions
 
@@ -74,8 +77,8 @@ Then verify Docker package import, Freqtrade strategy import without `sys.path.a
 ## Quota-Safe Resume Fields
 
 - Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
-- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; commit/push the Phase 01 no-Docker mode slice if not already committed; then continue Phase 02 in `NO_DOCKER_LOCAL_MODE` with static/offline Docker skeleton work only.
-- Recommended commit message: `phase-01: accept no-docker local mode`
+- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; commit/push the Phase 02 local/static slice if needed; then continue Phase 03 as local research only.
+- Recommended commit message: `phase-02: add portable freqtrade skeleton`
 
 ## Risks
 

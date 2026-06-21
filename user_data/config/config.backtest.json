@@ -1,0 +1,46 @@
+{
+  "bot_name": "coinbase_freqtrade_guarded_bot_backtest",
+  "initial_state": "stopped",
+  "dry_run": true,
+  "dry_run_wallet": 10000,
+  "trading_mode": "spot",
+  "margin_mode": "",
+  "stake_currency": "USD",
+  "stake_amount": 100,
+  "tradable_balance_ratio": 0.99,
+  "max_open_trades": 2,
+  "timeframe": "4h",
+  "fiat_display_currency": "USD",
+  "cancel_open_orders_on_exit": true,
+  "force_entry_enable": false,
+  "process_only_new_candles": true,
+  "exchange": {
+    "name": "coinbase",
+    "ccxt_config": {
+      "enableRateLimit": true
+    },
+    "ccxt_async_config": {
+      "enableRateLimit": true
+    },
+    "enable_ws": false,
+    "pair_whitelist": [
+      "BTC/USD",
+      "ETH/USD"
+    ],
+    "pair_blacklist": []
+  },
+  "pairlists": [
+    {
+      "method": "StaticPairList"
+    }
+  ],
+  "telegram": {
+    "enabled": false
+  },
+  "api_server": {
+    "enabled": false
+  },
+  "internals": {
+    "process_throttle_secs": 5
+  }
+}

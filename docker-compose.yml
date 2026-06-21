@@ -1,0 +1,17 @@
+services:
+  freqtrade:
+    image: freqtradeorg/freqtrade:stable
+    container_name: coinbase_freqtrade_guarded_bot
+    restart: "no"
+    working_dir: /freqtrade
+    volumes:
+      - ./user_data:/freqtrade/user_data
+      - ./src:/freqtrade/src:ro
+    environment:
+      PYTHONPATH: /freqtrade/src
+    command:
+      - trade
+      - --config
+      - /freqtrade/user_data/config/config.dryrun.json
+      - --strategy
+      - CoinbaseTrendGuardV1
