@@ -37,3 +37,19 @@ Live order execution is not part of the MVP.
 - Fail closed when uncertain.
 - Do not trade when audit, reconciliation, data quality, or kill-switch state is unknown.
 - No Coinbase sandbox result is accepted as strategy validation.
+
+## Phase 05 Baseline Strategy
+
+`user_data/strategies/CoinbaseTrendGuardV1.py` is the local/static baseline strategy skeleton.
+
+Design constraints:
+
+- Freqtrade strategy file, not application package business logic.
+- Long-only.
+- Spot only.
+- Main timeframe: 4h.
+- Informative trend timeframe: 1d.
+- BTC/USD and ETH/USD only through config.
+- No direct Coinbase, CCXT, HTTP, or order client code inside the strategy.
+- No `sys.path` import hacks.
+- Runtime Freqtrade import/backtest validation is deferred until Docker is available.

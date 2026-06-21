@@ -2,13 +2,13 @@
 
 ## STATUS SUMMARY
 
-Current phase: 05 - Baseline strategy V1 local/static slice
-Active agent: architect-agent + data-agent
-Last update: 2026-06-21 12:11
+Current phase: 05b - Minimal Guard Core local slice
+Active agent: strategy-agent
+Last update: 2026-06-21 12:14
 State: TODO
 Current branch: main
-Current commit: ee7e677
-Note: Phase 04 provisional data-source ADR is complete. Real data/Docker parity remains deferred, not passed.
+Current commit: 00b62d7
+Note: Phase 05 local/static baseline strategy skeleton is complete. Freqtrade runtime import/backtest remains deferred, not passed.
 
 ## OPEN QUESTIONS
 
@@ -25,8 +25,8 @@ Note: Phase 04 provisional data-source ADR is complete. Real data/Docker parity 
 | 03 | Coinbase/Freqtrade capability check | PARTIAL_RESEARCH_DOCKER_DEFERRED | - | CCXT Coinbase support documented; Freqtrade Coinbase runtime support unproven until Docker checks run. |
 | 03b | Data Parity Gate | LOCAL_MOCK_DONE_REAL_DATA_DEFERRED | - | Offline parity logic, report generation, and tests pass; real source parity deferred. |
 | 04 | Data source decision ADR | DONE | 2026-06-21 | ADR-002 provisionally accepted; final real-data source acceptance remains gated by Phase 03b runtime parity. |
-| 05 | Baseline strategy V1 | TODO | - | Next safe local slice can add static strategy skeleton and sanity tests without Docker runtime validation. |
-| 05b | Minimal Guard Core | TODO | - | Not started. |
+| 05 | Baseline strategy V1 | LOCAL_STATIC_DONE_RUNTIME_DEFERRED | - | Strategy skeleton and static sanity tests pass; Freqtrade runtime import/backtest deferred. |
+| 05b | Minimal Guard Core | TODO | - | Next safe local slice. |
 | 06 | Advanced backtest validation | TODO | - | Not started. |
 | 07 | Report layer | TODO | - | Not started. |
 | 08 | Dry-run / paper trading | TODO | - | Not started. |
@@ -65,6 +65,70 @@ Note: Phase 04 provisional data-source ADR is complete. Real data/Docker parity 
 - None.
 
 ## ENTRIES
+
+### 2026-06-21 12:14 - Phase 05 - strategy-agent
+**Action:** Started Phase 05 as a local/static baseline strategy slice after Phase 04 commit `00b62d7` was pushed to `origin/main`.
+**Files read:** CODEX_MASTER_PLAN.md Phase 05 section; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/ARCHITECTURE.md; docs/RUNBOOK.md; user_data/strategies listing.
+**Files modified:** LOG.md; PROJECT_STATE.md.
+**Commands run:** `[HOST_POWERSHELL] git push origin main`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] git rev-parse --short HEAD`; `[HOST_POWERSHELL] Get-Date`; `[HOST_POWERSHELL] Get-Content`; `[HOST_POWERSHELL] Get-ChildItem user_data/strategies`.
+**Tests:** Pending Phase 05 static validation.
+**Research:** No new research required. This slice uses local/static tests and does not run Freqtrade.
+**Decision:** Add a conservative long-only spot baseline strategy skeleton and static sanity tests. Do not import Freqtrade locally and do not run Docker.
+**Result:** PARTIAL
+**Next step:** Add `user_data/strategies/CoinbaseTrendGuardV1.py`, docs updates, and `tests/test_strategy_sanity.py`.
+
+### CHECKPOINT - 2026-06-21 12:14 - Phase 05
+State: IN_PROGRESS
+Done: Phase 05 local/static scope selected; current commit corrected to `00b62d7`.
+In progress: Creating static baseline strategy skeleton.
+Files changed since last checkpoint: LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Strategy cannot be runtime-imported until Freqtrade is available in Docker; static tests must not claim runtime PASS.
+Next safe step: Add strategy skeleton and static sanity tests.
+
+### CHECKPOINT - 2026-06-21 12:14 - Phase 05
+State: IN_PROGRESS
+Done: Added CoinbaseTrendGuardV1 static strategy skeleton, strategy sanity tests, architecture notes, and runbook commands.
+In progress: Local validation.
+Files changed since last checkpoint: user_data/strategies/CoinbaseTrendGuardV1.py; tests/test_strategy_sanity.py; docs/ARCHITECTURE.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Strategy is not runtime-imported locally because Freqtrade is not installed and Docker is unavailable.
+Next safe step: `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_strategy_sanity.py`
+
+### 2026-06-21 12:14 - Phase 05 - strategy-agent
+**Action:** Completed Phase 05 local/static baseline strategy skeleton.
+**Files read:** CODEX_MASTER_PLAN.md Phase 05 section; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/ARCHITECTURE.md; docs/RUNBOOK.md; user_data/strategies listing.
+**Files modified:** user_data/strategies/CoinbaseTrendGuardV1.py; tests/test_strategy_sanity.py; docs/ARCHITECTURE.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+**Commands run:** `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_strategy_sanity.py`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check .`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check tests\test_strategy_sanity.py user_data\strategies\CoinbaseTrendGuardV1.py --fix`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pip check`; `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`; `[HOST_POWERSHELL] git diff --check`.
+**Tests:** PASS - strategy sanity tests 5 tests; PASS - full pytest 39 tests; PASS - ruff after import/line-length fix; PASS - pip check; PASS - no-secret scan; PASS - git diff --check with line-ending warnings only.
+**Research:** No new research required.
+**Decision:** Keep Phase 05 local/static only. Do not claim Freqtrade runtime import, Docker strategy import, backtest, or dry-run PASS until Docker/Freqtrade is available.
+**Result:** PARTIAL
+**Next step:** Commit and push `phase-05: add baseline strategy skeleton`; then continue Phase 05b Minimal Guard Core.
+
+### CHECKPOINT - 2026-06-21 12:14 - Phase 05
+State: LOCAL_STATIC_DONE_RUNTIME_DEFERRED
+Done: Baseline strategy skeleton, architecture/runbook docs, and static sanity tests pass.
+In progress: Commit and push pending.
+Files changed since last checkpoint: user_data/strategies/CoinbaseTrendGuardV1.py; tests/test_strategy_sanity.py; docs/ARCHITECTURE.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending final check.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: strategy sanity PASS; full pytest PASS; ruff PASS; pip check PASS; no-secret scan PASS; diff check PASS with line-ending warnings only.
+Identified risks: Strategy runtime behavior is unvalidated until Freqtrade/Docker is available.
+Next safe step: `[HOST_POWERSHELL] git add user_data/strategies/CoinbaseTrendGuardV1.py tests/test_strategy_sanity.py docs/ARCHITECTURE.md docs/RUNBOOK.md LOG.md PROJECT_STATE.md`
+
+### QUOTA_SAFE_CHECKPOINT - 2026-06-21 12:14 - Phase 05
+Current slice: Baseline strategy V1 local/static skeleton.
+Files changed: user_data/strategies/CoinbaseTrendGuardV1.py; tests/test_strategy_sanity.py; docs/ARCHITECTURE.md; docs/RUNBOOK.md; LOG.md; PROJECT_STATE.md.
+Tests run: strategy sanity; full pytest; ruff; pip check; no-secret scan; git diff --check.
+Git status: Pending final check before commit.
+Recommended commit message: `phase-05: add baseline strategy skeleton`
+Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
+Resume instructions: Read CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, and PROJECT_STATE.md; commit/push Phase 05 if needed; then continue Phase 05b Minimal Guard Core locally.
 
 ### 2026-06-21 12:11 - Phase 04 - architect-agent + data-agent
 **Action:** Started Phase 04 as a provisional local ADR slice after Phase 03b commit `ee7e677` was pushed to `origin/main`.

@@ -167,6 +167,26 @@ Local Phase 03b output:
 
 Local Phase 03b validates gate behavior with mock data only. Real Coinbase and Freqtrade/CCXT data parity remains deferred until data access and Docker/Freqtrade runtime checks are available.
 
+## Phase 05 Local Static Strategy Checks
+
+These checks are valid in `NO_DOCKER_LOCAL_MODE`.
+
+```powershell
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest tests\test_strategy_sanity.py
+
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest
+
+# [LOCAL_VENV]
+.\.venv\Scripts\ruff.exe check .
+
+# [HOST_POWERSHELL]
+powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets
+```
+
+Phase 05 local/static checks parse `user_data/strategies/CoinbaseTrendGuardV1.py` without importing Freqtrade locally. Runtime import, backtest, and dry-run behavior remain `DEFERRED_DOCKER_REQUIRED`.
+
 ## Deferred Docker Validation
 
 Status: `DEFERRED_DOCKER_REQUIRED`.
