@@ -3,12 +3,12 @@
 ## STATUS SUMMARY
 
 Current phase: 05b - Minimal Guard Core local slice
-Active agent: strategy-agent
-Last update: 2026-06-21 12:14
-State: TODO
+Active agent: guard-agent
+Last update: 2026-06-21 12:19
+State: DONE
 Current branch: main
-Current commit: 00b62d7
-Note: Phase 05 local/static baseline strategy skeleton is complete. Freqtrade runtime import/backtest remains deferred, not passed.
+Current commit: ba8528c
+Note: Phase 05b Minimal Guard Core local implementation is complete and tested.
 
 ## OPEN QUESTIONS
 
@@ -26,8 +26,8 @@ Note: Phase 05 local/static baseline strategy skeleton is complete. Freqtrade ru
 | 03b | Data Parity Gate | LOCAL_MOCK_DONE_REAL_DATA_DEFERRED | - | Offline parity logic, report generation, and tests pass; real source parity deferred. |
 | 04 | Data source decision ADR | DONE | 2026-06-21 | ADR-002 provisionally accepted; final real-data source acceptance remains gated by Phase 03b runtime parity. |
 | 05 | Baseline strategy V1 | LOCAL_STATIC_DONE_RUNTIME_DEFERRED | - | Strategy skeleton and static sanity tests pass; Freqtrade runtime import/backtest deferred. |
-| 05b | Minimal Guard Core | TODO | - | Next safe local slice. |
-| 06 | Advanced backtest validation | TODO | - | Not started. |
+| 05b | Minimal Guard Core | DONE | 2026-06-21 | Typed guard models, kill-switch, audit writer, risk limits, and tests pass. |
+| 06 | Advanced backtest validation | TODO | - | Next phase; runtime backtest parts remain constrained by data/Docker deferrals. |
 | 07 | Report layer | TODO | - | Not started. |
 | 08 | Dry-run / paper trading | TODO | - | Not started. |
 | 08b | Fault Injection | TODO | - | POST_MVRS safety hardening. |
@@ -65,6 +65,70 @@ Note: Phase 05 local/static baseline strategy skeleton is complete. Freqtrade ru
 - None.
 
 ## ENTRIES
+
+### 2026-06-21 12:19 - Phase 05b - guard-agent
+**Action:** Started Phase 05b Minimal Guard Core after Phase 05 commit `ba8528c` was pushed to `origin/main`.
+**Files read:** CODEX_MASTER_PLAN.md Phase 05b section; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/RISK_POLICY.md; docs/skills/risk_engine.md.
+**Files modified:** LOG.md; PROJECT_STATE.md.
+**Commands run:** `[HOST_POWERSHELL] git push origin main`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] git rev-parse --short HEAD`; `[HOST_POWERSHELL] Get-Date`; `[HOST_POWERSHELL] Get-Content`.
+**Tests:** Pending Phase 05b implementation.
+**Research:** Not required; this is deterministic local guard logic.
+**Decision:** Implement minimal guard core only: typed intent/decision models, risk limits, file/env kill-switch, append-only audit JSONL, and deterministic tests. No Coinbase preview, reconciliation, live order path, ORM, or UI toggle.
+**Result:** PARTIAL
+**Next step:** Add guard modules, docs, and tests.
+
+### CHECKPOINT - 2026-06-21 12:19 - Phase 05b
+State: IN_PROGRESS
+Done: Phase 05b scope selected; current commit corrected to `ba8528c`.
+In progress: Implementing minimal guard core.
+Files changed since last checkpoint: LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Guard must fail closed and must not create any live execution path.
+Next safe step: Add guard modules and deterministic tests.
+
+### CHECKPOINT - 2026-06-21 12:19 - Phase 05b
+State: IN_PROGRESS
+Done: Added OrderIntent/RiskDecision models, risk limits, kill-switch, audit writer, tests, RISK_POLICY update, and KILL_SWITCH docs.
+In progress: Local validation.
+Files changed since last checkpoint: src/coinbase_freqtrade_guarded_bot/guard_layer/order_intent.py; src/coinbase_freqtrade_guarded_bot/guard_layer/risk_limits.py; src/coinbase_freqtrade_guarded_bot/guard_layer/kill_switch.py; src/coinbase_freqtrade_guarded_bot/guard_layer/audit_writer.py; src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py; tests/test_order_intent.py; tests/test_risk_limits.py; tests/test_kill_switch.py; tests/test_audit_writer.py; docs/RISK_POLICY.md; docs/KILL_SWITCH.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Audit writer failure must remain a guard blocker in later phases.
+Next safe step: `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_order_intent.py tests\test_risk_limits.py tests\test_kill_switch.py tests\test_audit_writer.py`
+
+### 2026-06-21 12:19 - Phase 05b - guard-agent
+**Action:** Completed Phase 05b Minimal Guard Core.
+**Files read:** CODEX_MASTER_PLAN.md Phase 05b section; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/RISK_POLICY.md; docs/skills/risk_engine.md.
+**Files modified:** src/coinbase_freqtrade_guarded_bot/guard_layer/order_intent.py; src/coinbase_freqtrade_guarded_bot/guard_layer/risk_limits.py; src/coinbase_freqtrade_guarded_bot/guard_layer/kill_switch.py; src/coinbase_freqtrade_guarded_bot/guard_layer/audit_writer.py; src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py; tests/test_order_intent.py; tests/test_risk_limits.py; tests/test_kill_switch.py; tests/test_audit_writer.py; docs/RISK_POLICY.md; docs/KILL_SWITCH.md; LOG.md; PROJECT_STATE.md.
+**Commands run:** `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_order_intent.py tests\test_risk_limits.py tests\test_kill_switch.py tests\test_audit_writer.py`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check .`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check src\coinbase_freqtrade_guarded_bot\guard_layer\kill_switch.py src\coinbase_freqtrade_guarded_bot\guard_layer\order_intent.py --fix`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pip check`; `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`; `[HOST_POWERSHELL] git diff --check`.
+**Tests:** PASS - guard targeted tests 16 tests; PASS - full pytest 55 tests; PASS - ruff after import/line-length fix; PASS - pip check; PASS - no-secret scan; PASS - git diff --check with line-ending warnings only. Overall coverage 98%; guard audit/kill/order/risk modules 100%.
+**Research:** Not required.
+**Decision:** Minimal guard core is ready for later dry-run integration. No live execution path, Coinbase preview, reconciliation, ORM, or UI toggle was added.
+**Result:** DONE
+**Next step:** Commit and push `phase-05b: add minimal guard core`.
+
+### CHECKPOINT - 2026-06-21 12:19 - Phase 05b
+State: DONE
+Done: OrderIntent/RiskDecision, risk limits, kill-switch, audit writer, rejected-intent auditing, docs, and deterministic tests pass.
+In progress: Commit and push pending.
+Files changed since last checkpoint: src/coinbase_freqtrade_guarded_bot/guard_layer/order_intent.py; src/coinbase_freqtrade_guarded_bot/guard_layer/risk_limits.py; src/coinbase_freqtrade_guarded_bot/guard_layer/kill_switch.py; src/coinbase_freqtrade_guarded_bot/guard_layer/audit_writer.py; src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py; tests/test_order_intent.py; tests/test_risk_limits.py; tests/test_kill_switch.py; tests/test_audit_writer.py; docs/RISK_POLICY.md; docs/KILL_SWITCH.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending final check.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: guard targeted PASS; full pytest PASS; ruff PASS; pip check PASS; no-secret scan PASS; diff check PASS with line-ending warnings only.
+Identified risks: Later Phase 08 must use this guard before any dry-run event expansion; audit writer failure must activate halt behavior in later guard phases.
+Next safe step: `[HOST_POWERSHELL] git add src/coinbase_freqtrade_guarded_bot/guard_layer/order_intent.py src/coinbase_freqtrade_guarded_bot/guard_layer/risk_limits.py src/coinbase_freqtrade_guarded_bot/guard_layer/kill_switch.py src/coinbase_freqtrade_guarded_bot/guard_layer/audit_writer.py src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py tests/test_order_intent.py tests/test_risk_limits.py tests/test_kill_switch.py tests/test_audit_writer.py docs/RISK_POLICY.md docs/KILL_SWITCH.md LOG.md PROJECT_STATE.md`
+
+### QUOTA_SAFE_CHECKPOINT - 2026-06-21 12:19 - Phase 05b
+Current slice: Minimal Guard Core.
+Files changed: src/coinbase_freqtrade_guarded_bot/guard_layer/order_intent.py; src/coinbase_freqtrade_guarded_bot/guard_layer/risk_limits.py; src/coinbase_freqtrade_guarded_bot/guard_layer/kill_switch.py; src/coinbase_freqtrade_guarded_bot/guard_layer/audit_writer.py; src/coinbase_freqtrade_guarded_bot/guard_layer/__init__.py; tests/test_order_intent.py; tests/test_risk_limits.py; tests/test_kill_switch.py; tests/test_audit_writer.py; docs/RISK_POLICY.md; docs/KILL_SWITCH.md; LOG.md; PROJECT_STATE.md.
+Tests run: guard targeted tests; full pytest; ruff; pip check; no-secret scan; git diff --check.
+Git status: Pending final check before commit.
+Recommended commit message: `phase-05b: add minimal guard core`
+Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
+Resume instructions: Read CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, and PROJECT_STATE.md; commit/push Phase 05b if needed; next phase is Phase 06, but runtime backtest work remains constrained by real data/Docker deferrals.
 
 ### 2026-06-21 12:14 - Phase 05 - strategy-agent
 **Action:** Started Phase 05 as a local/static baseline strategy slice after Phase 04 commit `00b62d7` was pushed to `origin/main`.

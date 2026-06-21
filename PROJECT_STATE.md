@@ -2,19 +2,19 @@
 
 ## Current Slice
 
-- Phase: 05b - Minimal Guard Core local slice
+- Phase: 06 - Advanced backtest validation
 - State: TODO
 - Agent: guard-agent
-- Started: 2026-06-21 12:14
+- Started: 2026-06-21 12:19
 - Branch: main
-- Base commit: 00b62d7
+- Base commit: ba8528c
 - Current mode: `NO_DOCKER_LOCAL_MODE`
 - Docker status: `DEFERRED_DOCKER_REQUIRED`
 
 ## Last PASS/FAIL
 
-- Last validation: 2026-06-21 12:14
-- Result: PARTIAL - Phase 05 local/static strategy skeleton completed; Freqtrade runtime import/backtest remains deferred, not passed.
+- Last validation: 2026-06-21 12:19
+- Result: DONE - Phase 05b Minimal Guard Core completed and tested.
 - Current decision: local work continues without Docker; Docker-dependent acceptance criteria are deferred, not passed.
 
 ## Open Questions
@@ -32,13 +32,13 @@
 
 ## Next Safe Local Phase
 
-- Phase 05b can proceed as local Minimal Guard Core implementation.
-- Allowed locally: typed guard models, risk decision logic, kill-switch checks, audit-safe rejection reasons, and deterministic unit tests.
+- Phase 06 is next, but runtime backtest work remains constrained by real data and Docker deferrals.
+- Allowed locally: backtest validation documentation, metrics design, and mocked report logic if it does not claim real backtest PASS.
 - Deferred: Docker Compose validation, Freqtrade container execution, Docker import smoke tests, and Freqtrade dry-run runtime.
 
 ## Files Changed In Current Slice
 
-- None yet for Phase 05b.
+- None yet for Phase 06.
 
 ## Tests And Checks
 
@@ -56,6 +56,7 @@
 - PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_data_parity.py`
 - PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe scripts\compare_coinbase_data_sources.py`
 - PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_strategy_sanity.py`
+- PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_order_intent.py tests\test_risk_limits.py tests\test_kill_switch.py tests\test_audit_writer.py`
 
 ## Future Docker-Capable Resume Instructions
 
@@ -83,8 +84,8 @@ Then verify Docker package import, Freqtrade strategy import without `sys.path.a
 ## Quota-Safe Resume Fields
 
 - Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
-- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; commit/push Phase 05 if needed; then continue Phase 05b Minimal Guard Core locally.
-- Recommended commit message: `phase-05: add baseline strategy skeleton`
+- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; commit/push Phase 05b if needed; then evaluate Phase 06 scope against real data/Docker deferrals.
+- Recommended commit message: `phase-05b: add minimal guard core`
 
 ## Risks
 

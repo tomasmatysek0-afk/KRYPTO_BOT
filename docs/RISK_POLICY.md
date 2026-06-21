@@ -35,3 +35,22 @@ Trading is not possible when:
 - reconciliation is unknown;
 - data parity fails without a safe fallback;
 - live trading is requested before Phase 18 approval.
+
+## Phase 05b Minimal Guard Core
+
+The minimal guard core evaluates order intents before backtest/dry-run expansion.
+
+Implemented local rules:
+
+- typed `OrderIntent` and `RiskDecision` models;
+- file/env kill-switch blocks intents;
+- `ALLOW_LIVE_TRADING=false` equivalent behavior through `allow_live_trading=False`;
+- live intents are rejected by default;
+- leverage is rejected;
+- opening shorts is rejected;
+- non-spot modes are rejected by model/type constraints;
+- stake above configured maximum is rejected;
+- open intent count at or above configured maximum is rejected;
+- every decision, including rejection, is written to append-only JSONL audit.
+
+The minimal guard core does not create live orders, Coinbase previews, reconciliation, or UI toggles.
