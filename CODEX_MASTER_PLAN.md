@@ -1188,6 +1188,110 @@ If Codex does not know where a command should run, it must not continue by guess
 
 ---
 
+## 11A. NO_DOCKER_LOCAL_MODE and Docker portability policy
+
+`NO_DOCKER_LOCAL_MODE` is an approved local development mode for a workstation where Docker Desktop, Docker Compose, and WSL2 are unavailable and administrator rights are not available.
+
+### 11A.1 Local limitation
+
+The current local environment has these confirmed constraints:
+
+- Docker Desktop is unavailable locally.
+- Docker Compose is unavailable locally.
+- WSL2 is unavailable locally.
+- Administrator privileges are not available for installing or repairing these tools.
+- `winget` cannot install Docker because the `winget` source fails with `0x8a15000f : Data required by the source is missing`.
+- `winget source reset --force` requires administrator privileges and must not be attempted by Codex in this mode.
+
+Codex must not stop only because Docker/WSL are missing while `NO_DOCKER_LOCAL_MODE` is active. Codex must also not ask the user again to install Docker/WSL during this mode.
+
+### 11A.2 Decision
+
+Local development continues without Docker. Docker remains part of the target architecture and must not be removed, bypassed, or treated as obsolete.
+
+Local work may continue on:
+
+- Python package structure;
+- CLI;
+- local pytest, ruff, pytest-cov, and pytest-socket checks;
+- guard layer;
+- audit writer;
+- kill-switch;
+- risk limits;
+- data parity logic with mocked/offline data;
+- tax ledger;
+- SQLite schema policy;
+- reports;
+- documentation;
+- offline tests.
+
+The following work is postponed until a Docker-capable environment is available:
+
+- Docker Compose validation;
+- Freqtrade container execution;
+- Docker import smoke tests;
+- Freqtrade dry-run runtime;
+- any command requiring administrator rights;
+- any command requiring credentials or secrets.
+
+### 11A.3 Acceptance criteria status
+
+Docker-dependent acceptance criteria must be marked `DEFERRED_DOCKER_REQUIRED`.
+
+This means:
+
+- the criterion is not considered passed;
+- the criterion is not considered failed solely because Docker is unavailable locally;
+- the criterion remains mandatory before live-pilot readiness;
+- the criterion must be revalidated on a future Docker-capable machine.
+
+Known deferred criteria include:
+
+- Docker Compose config validation;
+- Freqtrade container start;
+- Freqtrade container package import smoke tests;
+- Docker-based strategy import smoke tests;
+- Docker/Freqtrade backtest execution;
+- Docker/Freqtrade dry-run execution.
+
+### 11A.4 Portability requirements
+
+All local work must remain portable to Docker and to another workstation.
+
+Required:
+
+- use relative repository paths in application logic and configuration examples;
+- keep application logic under `src/coinbase_freqtrade_guarded_bot/`;
+- keep Docker-related files maintainable even when not locally validated;
+- keep Freqtrade-facing imports compatible with the package import policy;
+- keep tests runnable in the local virtual environment without network access by default;
+- keep generated reports and runtime data out of Git unless explicitly intended.
+
+Forbidden:
+
+- Windows-only hardcoded paths in application logic;
+- application code that depends on the current developer's user profile path;
+- replacing Docker/Freqtrade architecture with a local-only architecture;
+- marking Docker runtime validation as passed without actually running it;
+- using secrets, real API keys, or live trading to compensate for missing Docker validation.
+
+### 11A.5 Future Docker handoff checklist
+
+When a Docker-capable environment is available, Codex must run a bounded Docker revalidation slice before any Docker-dependent phase can be considered complete:
+
+- verify `[HOST_POWERSHELL] docker --version`;
+- verify `[HOST_POWERSHELL] docker compose version`;
+- verify `[HOST_POWERSHELL] wsl --status` on Windows if WSL2 is the Docker backend;
+- run `[HOST_POWERSHELL] docker compose config`;
+- run `[DOCKER_FREQTRADE] docker compose run --rm freqtrade --help`;
+- run the Docker package import smoke test;
+- run the Freqtrade strategy import smoke test without `sys.path.append`;
+- verify `dry_run=true` in Freqtrade config;
+- verify there are no real API keys or secrets in Docker config;
+- update `LOG.md`, `PROJECT_STATE.md`, and the relevant phase tracker rows with PASS or remaining blockers.
+
+---
+
 ## 12. Network I/O, rate limiting and retry policy
 
 All network operations against Coinbase, CCXT, Freqtrade API, or external sources must be separated from business logic.
@@ -2757,6 +2861,61 @@ Forbidden:
 - [ ] Knowledge base has no direct live execution link.
 - [ ] Codex explicitly marks survivorship/marketing bias.
 - [ ] LOG updated.
+
+---
+
+## POST_MVRS — Personal Trading Briefing / Operator Discipline Layer
+
+**Agent:** `knowledge-agent` + `guard-agent` + `research-agent`
+
+**Priority:** POST_MVRS. This feature must not block MVRS, local no-Docker development, or the core guard/audit/data work.
+
+### Purpose
+
+Create a short personal trading briefing before the operator opens charts. The briefing is a risk and discipline layer, not a signal engine.
+
+It should help:
+
+- reduce impulsive trading;
+- relate market information to predefined trading rules;
+- summarize what changed since the prior review;
+- highlight no-trade conditions;
+- keep the operator aligned with documented risk limits.
+
+### Future briefing content
+
+The briefing may eventually include:
+
+- what happened overnight;
+- BTC and ETH state;
+- watchlist movers;
+- relevant news or macro events;
+- key levels;
+- sentiment or volatility regime;
+- today's personal trading rules;
+- impulse-risk warning;
+- today's allowed plan;
+- no-trade conditions.
+
+### Constraints
+
+- Read-only.
+- No live trading.
+- No automatic order generation.
+- No direct buy/sell signal generation.
+- No hallucinated news, levels, or market data.
+- All factual market/news data must be sourced or generated from validated local data.
+- If data quality is insufficient, the briefing must say so.
+- The briefing must be short, ideally one page or readable in two minutes.
+- The feature is POST_MVRS and must not block current local development.
+
+### Acceptance criteria
+
+- [ ] Feature remains POST_MVRS until MVRS is complete.
+- [ ] No direct signal or execution path exists.
+- [ ] All factual market/news data is sourced or produced from validated local data.
+- [ ] Insufficient data quality produces a clear no-briefing or limited-briefing state.
+- [ ] LOG updated if implementation starts in a future phase.
 
 ---
 

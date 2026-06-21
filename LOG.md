@@ -2,17 +2,17 @@
 
 ## STATUS SUMMARY
 
-Current phase: 01 - Development environment
-Active agent: sre-agent
-Last update: 2026-06-20 14:00
-State: WAITING_FOR_USER
+Current phase: 02 - Freqtrade Docker skeleton local/static slice
+Active agent: sre-agent + architect-agent
+Last update: 2026-06-21 11:39
+State: TODO
 Current branch: main
-Current commit: d5e2451
-Note: Phase 01 is blocked because Docker is not available on PATH and WSL is not installed. CODEX_MASTER_PLAN.md still has pre-existing unstaged user changes and is excluded from this slice.
+Current commit: ccee38a
+Note: Phase 01 no-Docker policy update is complete locally. Docker-dependent acceptance criteria are `DEFERRED_DOCKER_REQUIRED`, not passed.
 
 ## OPEN QUESTIONS
 
-- [ ] 2026-06-20 Phase 01 - Install/enable Docker Desktop with Docker Compose and WSL2 locally, then confirm `docker --version`, `docker compose version`, and `wsl --status` work in PowerShell. Do not send credentials or tokens in chat. (waiting for local setup)
+- [x] 2026-06-20 Phase 01 - Install/enable Docker Desktop with Docker Compose and WSL2 locally, then confirm `docker --version`, `docker compose version`, and `wsl --status` work in PowerShell. Do not send credentials or tokens in chat. -> ANSWER 2026-06-21: Docker/WSL are not available locally, administrator rights are not available, `winget` repair requires administrator rights, and the project must continue in `NO_DOCKER_LOCAL_MODE` without asking again for Docker/WSL installation.
 
 ## PHASE TRACKER
 
@@ -20,8 +20,8 @@ Note: Phase 01 is blocked because Docker is not available on PATH and WSL is not
 |---|---|---|---|---|
 | 00 | Repository bootstrap | DONE | 2026-06-20 | Restartable skeleton, policy docs, ignore rules, and skill stubs created. |
 | 00b | Coding standards and package skeleton | DONE | 2026-06-20 | Package skeleton, CLI, tooling, docs, locks, and smoke tests complete. |
-| 01 | Development environment | WAITING_FOR_USER | - | Docker CLI/Compose and WSL are missing locally. |
-| 02 | Freqtrade Docker skeleton | TODO | - | Not started. |
+| 01 | Development environment | DONE | 2026-06-21 | `NO_DOCKER_LOCAL_MODE` adopted; Docker criteria deferred, not passed. |
+| 02 | Freqtrade Docker skeleton | TODO | - | Next safe local slice can create portable/static files; Docker runtime validation deferred. |
 | 03 | Coinbase/Freqtrade capability check | TODO | - | Not started. |
 | 03b | Data Parity Gate | TODO | - | Not started. |
 | 04 | Data source decision ADR | TODO | - | Not started. |
@@ -57,13 +57,66 @@ Note: Phase 01 is blocked because Docker is not available on PATH and WSL is not
 
 | ADR | Decision | Date | State |
 |---|---|---|---|
-| None | No ADR decisions yet. | - | - |
+| ADR-005 | Adopt `NO_DOCKER_LOCAL_MODE` and defer Docker runtime criteria until a Docker-capable environment is available. | 2026-06-21 | Accepted |
 
 ## ARCHIVED SUMMARY
 
 - None.
 
 ## ENTRIES
+
+### 2026-06-21 11:39 - Phase 01 - sre-agent + architect-agent
+**Action:** Began adopting `NO_DOCKER_LOCAL_MODE` after reading CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, PROJECT_STATE.md, docs/RUNBOOK.md, and the attached user request. Confirmed Docker/WSL absence is no longer a local blocker and Docker-dependent criteria must be deferred rather than passed.
+**Files read:** CODEX_MASTER_PLAN.md; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/RUNBOOK.md; attached pasted request.
+**Files modified:** CODEX_MASTER_PLAN.md; docs/adr/ADR-005-no-docker-local-development-mode.md; docs/RUNBOOK.md; PROJECT_STATE.md; LOG.md.
+**Commands run:** `[HOST_POWERSHELL] Get-Content -Raw CODEX_MASTER_PLAN.md`; `[HOST_POWERSHELL] Get-Content -Raw LOG.md`; `[HOST_POWERSHELL] Get-Content -Raw AGENTS.md`; `[HOST_POWERSHELL] Get-Content -Raw PROJECT_STATE.md`; `[HOST_POWERSHELL] Get-Content -Raw attached pasted request`; `[HOST_POWERSHELL] Get-Content -Raw docs/RUNBOOK.md`; `[HOST_POWERSHELL] rg`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] Get-Date`; `[HOST_POWERSHELL] git rev-parse --short HEAD`.
+**Tests:** Pending local no-Docker validation.
+**Research:** Not required; this is a local execution-mode decision from confirmed workstation limits.
+**Decision:** Local development continues in `NO_DOCKER_LOCAL_MODE`; Docker/Freqtrade runtime criteria are marked `DEFERRED_DOCKER_REQUIRED`, not passed; do not attempt privileged installation commands and do not ask the user again to install Docker/WSL in this mode.
+**Result:** PARTIAL
+**Next step:** Run local pytest, ruff, pip check, and no-secret scan; then finalize log/state and commit.
+
+### CHECKPOINT - 2026-06-21 11:39 - Phase 01
+State: IN_PROGRESS
+Done: Master plan no-Docker policy added; ADR-005 created; runbook no-Docker command catalog added; PROJECT_STATE.md updated.
+In progress: Local validation for documentation/state slice.
+Files changed since last checkpoint: CODEX_MASTER_PLAN.md; docs/adr/ADR-005-no-docker-local-development-mode.md; docs/RUNBOOK.md; PROJECT_STATE.md; LOG.md.
+Git diff summary: Pending validation.
+Execution context used for commands: `[HOST_POWERSHELL]` only so far.
+Tests: Pending.
+Identified risks: Docker/Freqtrade runtime validation remains unavailable locally and must not be marked as passed.
+Next safe step: `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`
+
+### 2026-06-21 11:39 - Phase 01 - sre-agent + architect-agent
+**Action:** Completed the `NO_DOCKER_LOCAL_MODE` documentation/state slice.
+**Files read:** CODEX_MASTER_PLAN.md; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/RUNBOOK.md; attached pasted request.
+**Files modified:** CODEX_MASTER_PLAN.md; docs/adr/ADR-005-no-docker-local-development-mode.md; docs/RUNBOOK.md; PROJECT_STATE.md; LOG.md.
+**Commands run:** `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check .`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pip check`; `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`; `[HOST_POWERSHELL] git diff --stat`; `[HOST_POWERSHELL] git diff --check`; `[HOST_POWERSHELL] rg -n "NO_DOCKER_LOCAL_MODE|DEFERRED_DOCKER_REQUIRED|Personal Trading Briefing|ADR-005"`.
+**Tests:** PASS - pytest 5 tests; PASS - ruff check; PASS - pip check; PASS - no-secret scan; PASS - git diff --check with only line-ending warnings. Pytest, ruff, no-secret scan, and diff check were rerun after final LOG/PROJECT_STATE edits.
+**Research:** Not required.
+**Decision:** Phase 01 is complete for local no-Docker mode. Docker/Freqtrade runtime checks stay deferred and must be revalidated later.
+**Result:** DONE
+**Next step:** Commit and push `phase-01: accept no-docker local mode`, then start Phase 02 as a local static/offline Docker skeleton slice.
+
+### CHECKPOINT - 2026-06-21 11:39 - Phase 01
+State: DONE
+Done: `NO_DOCKER_LOCAL_MODE` adopted in master plan, ADR, runbook, project state, and log.
+In progress: Commit and push pending.
+Files changed since last checkpoint: CODEX_MASTER_PLAN.md; docs/adr/ADR-005-no-docker-local-development-mode.md; docs/RUNBOOK.md; PROJECT_STATE.md; LOG.md.
+Git diff summary: CODEX_MASTER_PLAN.md, LOG.md, PROJECT_STATE.md, and docs/RUNBOOK.md changed; new ADR-005 file pending stage.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: pytest PASS; ruff PASS; pip check PASS; no-secret scan PASS; diff check PASS with line-ending warnings only. Pytest, ruff, no-secret scan, and diff check were rerun after final LOG/PROJECT_STATE edits.
+Identified risks: Docker/Freqtrade runtime validation remains unavailable locally and must not be marked as passed.
+Next safe step: `[HOST_POWERSHELL] git add CODEX_MASTER_PLAN.md docs/RUNBOOK.md docs/adr/ADR-005-no-docker-local-development-mode.md PROJECT_STATE.md LOG.md`
+
+### QUOTA_SAFE_CHECKPOINT - 2026-06-21 11:39 - Phase 01
+Current slice: Adopt no-Docker local development mode while preserving Docker portability.
+Files changed: CODEX_MASTER_PLAN.md; docs/adr/ADR-005-no-docker-local-development-mode.md; docs/RUNBOOK.md; PROJECT_STATE.md; LOG.md.
+Tests run: pytest; ruff; pip check; no-secret scan; git diff --check; final rerun of pytest, ruff, no-secret scan, and git diff --check after LOG/PROJECT_STATE edits.
+Git status: Pending final check before commit.
+Recommended commit message: `phase-01: accept no-docker local mode`
+Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
+Resume instructions: Read CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, and PROJECT_STATE.md; continue Phase 02 locally with only static/offline Docker skeleton work; keep Docker runtime checks marked `DEFERRED_DOCKER_REQUIRED`.
 
 ### 2026-06-20 13:40 - Phase 00 - architect-agent
 **Action:** Started Phase 00 after reading CODEX_MASTER_PLAN.md in full and verifying repository root, master plan presence, GitHub remote, and missing restartability files.
