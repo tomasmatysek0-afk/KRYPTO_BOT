@@ -2,19 +2,19 @@
 
 ## Current Slice
 
-- Phase: 04 - Data source decision ADR local/provisional slice
+- Phase: 05 - Baseline strategy V1 local/static slice
 - State: TODO
-- Agent: architect-agent + data-agent
-- Started: 2026-06-21 11:55
+- Agent: strategy-agent
+- Started: 2026-06-21 12:11
 - Branch: main
-- Base commit: 21aa343
+- Base commit: ee7e677
 - Current mode: `NO_DOCKER_LOCAL_MODE`
 - Docker status: `DEFERRED_DOCKER_REQUIRED`
 
 ## Last PASS/FAIL
 
-- Last validation: 2026-06-21 11:55
-- Result: PARTIAL - Phase 03b local/mock Data Parity Gate completed; real data parity remains deferred, not passed.
+- Last validation: 2026-06-21 12:11
+- Result: DONE - Phase 04 provisional data-source ADR completed; real data parity remains deferred, not passed.
 - Current decision: local work continues without Docker; Docker-dependent acceptance criteria are deferred, not passed.
 
 ## Open Questions
@@ -32,13 +32,13 @@
 
 ## Next Safe Local Phase
 
-- Phase 04 can proceed as a provisional local ADR.
-- Allowed locally: document the provisional data-source decision and explicitly block final strategy validation until real Coinbase/Freqtrade parity checks run.
+- Phase 05 can proceed as a local/static baseline strategy slice.
+- Allowed locally: create strategy skeleton, document assumptions, and add static sanity tests without importing Freqtrade locally.
 - Deferred: Docker Compose validation, Freqtrade container execution, Docker import smoke tests, and Freqtrade dry-run runtime.
 
 ## Files Changed In Current Slice
 
-- None yet for Phase 04.
+- None yet for Phase 05.
 
 ## Tests And Checks
 
@@ -82,8 +82,8 @@ Then verify Docker package import, Freqtrade strategy import without `sys.path.a
 ## Quota-Safe Resume Fields
 
 - Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
-- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; commit/push Phase 03b if needed; then continue Phase 04 with a provisional data-source ADR that preserves the real-data parity gate.
-- Recommended commit message: `phase-03b: add offline data parity gate`
+- Safe resume instruction: Read `CODEX_MASTER_PLAN.md`, `AGENTS.md`, `LOG.md`, and this file; commit/push Phase 04 if needed; then continue Phase 05 as a local/static strategy slice without claiming Freqtrade runtime validation.
+- Recommended commit message: `phase-04: record provisional data source decision`
 
 ## Risks
 

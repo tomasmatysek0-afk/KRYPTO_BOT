@@ -2,13 +2,13 @@
 
 ## STATUS SUMMARY
 
-Current phase: 04 - Data source decision ADR local/provisional slice
-Active agent: data-agent
-Last update: 2026-06-21 11:55
+Current phase: 05 - Baseline strategy V1 local/static slice
+Active agent: architect-agent + data-agent
+Last update: 2026-06-21 12:11
 State: TODO
 Current branch: main
-Current commit: 21aa343
-Note: Phase 03b local/mock gate is complete as `LOCAL_MOCK_DONE_REAL_DATA_DEFERRED`. Real data/Docker parity remains deferred, not passed.
+Current commit: ee7e677
+Note: Phase 04 provisional data-source ADR is complete. Real data/Docker parity remains deferred, not passed.
 
 ## OPEN QUESTIONS
 
@@ -24,8 +24,8 @@ Note: Phase 03b local/mock gate is complete as `LOCAL_MOCK_DONE_REAL_DATA_DEFERR
 | 02 | Freqtrade Docker skeleton | LOCAL_STATIC_DONE_DOCKER_DEFERRED | - | Portable files and local no-live tests pass; Docker runtime validation deferred, not passed. |
 | 03 | Coinbase/Freqtrade capability check | PARTIAL_RESEARCH_DOCKER_DEFERRED | - | CCXT Coinbase support documented; Freqtrade Coinbase runtime support unproven until Docker checks run. |
 | 03b | Data Parity Gate | LOCAL_MOCK_DONE_REAL_DATA_DEFERRED | - | Offline parity logic, report generation, and tests pass; real source parity deferred. |
-| 04 | Data source decision ADR | TODO | - | Next safe local slice can record provisional data-source policy and real-data gate requirement. |
-| 05 | Baseline strategy V1 | TODO | - | Not started. |
+| 04 | Data source decision ADR | DONE | 2026-06-21 | ADR-002 provisionally accepted; final real-data source acceptance remains gated by Phase 03b runtime parity. |
+| 05 | Baseline strategy V1 | TODO | - | Next safe local slice can add static strategy skeleton and sanity tests without Docker runtime validation. |
 | 05b | Minimal Guard Core | TODO | - | Not started. |
 | 06 | Advanced backtest validation | TODO | - | Not started. |
 | 07 | Report layer | TODO | - | Not started. |
@@ -57,6 +57,7 @@ Note: Phase 03b local/mock gate is complete as `LOCAL_MOCK_DONE_REAL_DATA_DEFERR
 
 | ADR | Decision | Date | State |
 |---|---|---|---|
+| ADR-002 | Provisional data-source policy: Coinbase Advanced Trade as candidate authoritative raw candle source, Freqtrade as candidate engine, final acceptance gated by real parity and Docker checks. | 2026-06-21 | Provisionally accepted |
 | ADR-005 | Adopt `NO_DOCKER_LOCAL_MODE` and defer Docker runtime criteria until a Docker-capable environment is available. | 2026-06-21 | Accepted |
 
 ## ARCHIVED SUMMARY
@@ -64,6 +65,70 @@ Note: Phase 03b local/mock gate is complete as `LOCAL_MOCK_DONE_REAL_DATA_DEFERR
 - None.
 
 ## ENTRIES
+
+### 2026-06-21 12:11 - Phase 04 - architect-agent + data-agent
+**Action:** Started Phase 04 as a provisional local ADR slice after Phase 03b commit `ee7e677` was pushed to `origin/main`.
+**Files read:** CODEX_MASTER_PLAN.md Phase 04 section; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/DATA_SOURCE_POLICY.md.
+**Files modified:** LOG.md; PROJECT_STATE.md.
+**Commands run:** `[HOST_POWERSHELL] git push origin main`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] git rev-parse --short HEAD`; `[HOST_POWERSHELL] Get-Date`; `[HOST_POWERSHELL] Get-Content`.
+**Tests:** Pending Phase 04 documentation validation.
+**Research:** No new research required; Phase 04 uses Phase 03 research and Phase 03b local gate result.
+**Decision:** Create a provisional ADR that uses Coinbase Advanced Trade as the candidate authoritative raw-data source and Freqtrade as engine candidate, while blocking final strategy validation until real data parity and Docker runtime checks run.
+**Result:** PARTIAL
+**Next step:** Add `docs/adr/ADR-002-data-source-policy.md`, update `docs/DATA_SOURCE_POLICY.md`, LOG, and PROJECT_STATE.
+
+### CHECKPOINT - 2026-06-21 12:11 - Phase 04
+State: IN_PROGRESS
+Done: Phase 04 scope selected; current commit corrected to `ee7e677`.
+In progress: Writing provisional ADR.
+Files changed since last checkpoint: LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: ADR must not claim real data parity or Docker validation has passed.
+Next safe step: Add provisional data-source ADR.
+
+### CHECKPOINT - 2026-06-21 12:11 - Phase 04
+State: IN_PROGRESS
+Done: Added ADR-002 and updated DATA_SOURCE_POLICY.md with the provisional data-source decision.
+In progress: Local validation.
+Files changed since last checkpoint: docs/adr/ADR-002-data-source-policy.md; docs/DATA_SOURCE_POLICY.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: ADR-002 is provisional and cannot be treated as real data-source PASS.
+Next safe step: `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`
+
+### 2026-06-21 12:11 - Phase 04 - architect-agent + data-agent
+**Action:** Completed Phase 04 provisional data-source ADR.
+**Files read:** CODEX_MASTER_PLAN.md Phase 04 section; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/DATA_SOURCE_POLICY.md.
+**Files modified:** docs/adr/ADR-002-data-source-policy.md; docs/DATA_SOURCE_POLICY.md; LOG.md; PROJECT_STATE.md.
+**Commands run:** `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check .`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pip check`; `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`; `[HOST_POWERSHELL] git diff --check`.
+**Tests:** PASS - full pytest 34 tests; PASS - ruff; PASS - pip check; PASS - no-secret scan; PASS - git diff --check with line-ending warnings only.
+**Research:** No new research required; based on Phase 03 and Phase 03b results.
+**Decision:** ADR-002 is provisionally accepted. Coinbase Advanced Trade is the candidate authoritative raw candle source; Freqtrade remains the candidate engine; final data-source acceptance is blocked until real data parity and Docker/Freqtrade runtime checks run.
+**Result:** DONE
+**Next step:** Commit and push `phase-04: record provisional data source decision`; then continue Phase 05 as a local/static baseline strategy slice.
+
+### CHECKPOINT - 2026-06-21 12:11 - Phase 04
+State: DONE
+Done: ADR-002 exists with date, reason, risks, and data failure behavior; DATA_SOURCE_POLICY.md updated; Decision Register updated; local validation passed.
+In progress: Commit and push pending.
+Files changed since last checkpoint: docs/adr/ADR-002-data-source-policy.md; docs/DATA_SOURCE_POLICY.md; LOG.md; PROJECT_STATE.md.
+Git diff summary: New ADR-002 plus data-source policy/log/state updates.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: pytest PASS; ruff PASS; pip check PASS; no-secret scan PASS; diff check PASS with line-ending warnings only.
+Identified risks: ADR-002 is provisional and must not be used to bypass the real data parity gate.
+Next safe step: `[HOST_POWERSHELL] git add docs/adr/ADR-002-data-source-policy.md docs/DATA_SOURCE_POLICY.md LOG.md PROJECT_STATE.md`
+
+### QUOTA_SAFE_CHECKPOINT - 2026-06-21 12:11 - Phase 04
+Current slice: Provisional data-source ADR in `NO_DOCKER_LOCAL_MODE`.
+Files changed: docs/adr/ADR-002-data-source-policy.md; docs/DATA_SOURCE_POLICY.md; LOG.md; PROJECT_STATE.md.
+Tests run: full pytest; ruff; pip check; no-secret scan; git diff --check.
+Git status: Pending final check before commit.
+Recommended commit message: `phase-04: record provisional data source decision`
+Next deterministic command: `[HOST_POWERSHELL] git status --short --branch`
+Resume instructions: Read CODEX_MASTER_PLAN.md, AGENTS.md, LOG.md, and PROJECT_STATE.md; commit/push Phase 04 if needed; then continue Phase 05 as a local/static strategy slice without claiming Freqtrade runtime validation.
 
 ### 2026-06-21 11:55 - Phase 03b - data-agent
 **Action:** Started Phase 03b as a local mocked/offline Data Parity Gate slice after Phase 03 commit `21aa343` was pushed to `origin/main`.

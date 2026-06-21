@@ -2,11 +2,13 @@
 
 ## Status
 
-Phase 03 local research result - 2026-06-21.
+Phase 04 provisional ADR result - 2026-06-21.
 
 Current mode: `NO_DOCKER_LOCAL_MODE`.
 
 Docker/Freqtrade runtime checks are `DEFERRED_DOCKER_REQUIRED`, not passed.
+
+Current ADR: `docs/adr/ADR-002-data-source-policy.md`.
 
 ## Scope
 
@@ -60,9 +62,11 @@ Known constraints:
 
 ## Provisional Decision
 
-State: `PARTIAL_RESEARCH_DOCKER_DEFERRED`.
+State: `PROVISIONAL_ADR_ACCEPTED_REAL_DATA_DEFERRED`.
 
 Do not treat Freqtrade Coinbase support as proven yet.
+
+For continued local development, Coinbase Advanced Trade is the candidate authoritative raw candle source, and Freqtrade remains the candidate research/backtest/dry-run engine. This is not a real-data parity PASS.
 
 Proceed locally with:
 
@@ -135,6 +139,16 @@ Still deferred:
 - Freqtrade/CCXT data download;
 - Docker/Freqtrade `list-exchanges`, `list-pairs`, and version checks;
 - real data parity report using live market data.
+
+## Phase 04 Provisional ADR
+
+ADR-002 records a provisional local decision:
+
+- Coinbase Advanced Trade is the candidate authoritative raw candle source.
+- Freqtrade remains the candidate research/backtest/dry-run engine.
+- Final data-source acceptance is blocked until real data parity and Docker/Freqtrade runtime checks run.
+- If real Freqtrade/CCXT data mismatches Coinbase Advanced Trade, prefer Coinbase Advanced Trade data and convert it to Freqtrade-compatible format.
+- If data quality is unclear, fail closed.
 
 ## Do Not Implement
 
