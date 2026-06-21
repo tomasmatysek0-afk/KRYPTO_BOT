@@ -1,0 +1,56 @@
+{
+  "best_trade_profit": 174.06,
+  "buy_and_hold": {
+    "cagr": 5.093743480533,
+    "ending_price": 10750.0,
+    "ending_value": 10717.787600824588,
+    "quantity": 0.9985007496251874,
+    "starting_price": 10000.0,
+    "total_profit": 717.7876008245877,
+    "total_return": 0.07177876008245877
+  },
+  "conclusion": "RESEARCH_ONLY",
+  "config_version": "phase-06-local-offline-sample",
+  "data_source_decision": "ADR-002 provisional: Coinbase Advanced Trade candidate raw source; Freqtrade engine candidate pending real parity and Docker checks.",
+  "deferred_items": [
+    "real Freqtrade backtest execution",
+    "real strategy runtime loading inside Freqtrade",
+    "Docker-based Freqtrade backtest",
+    "Docker-based data download",
+    "real Coinbase/Freqtrade data parity",
+    "dry-run runtime validation"
+  ],
+  "deferred_status": "DEFERRED_DOCKER_REQUIRED",
+  "disclaimer": "Research-only offline sample report. This is not financial advice, not a profit guarantee, and not evidence that real Freqtrade backtesting or dry-run runtime validation has passed.",
+  "enter_tag_aggregation": [
+    {
+      "enter_tag": "trend_pullback",
+      "total_profit": 22.494,
+      "trade_count": 4
+    },
+    {
+      "enter_tag": "volume_confirmed",
+      "total_profit": 195.556,
+      "trade_count": 2
+    }
+  ],
+  "exposure": 0.42857142857142855,
+  "fee_model": "mock roundtrip fee scenarios only; no exchange execution",
+  "local_acceptance_status": "LOCAL_OFFLINE_PASS",
+  "max_drawdown": 0.0084435005329388,
+  "monthly_returns": [
+    {
+      "return_rate": 0.021805,
+      "year_month": "2026-01"
+    }
+  ],
+  "number_of_trades": 6,
+  "pairs": [
+    "BTC/USD",
+    "ETH/USD"
+  ],
+  "slippage_model": "mock local slippage scenarios only; no exchange execution",
+  "strategy_name": "CoinbaseTrendGuardV1",
+  "timeframe": "1h with 1d trend context",
+  "worst_trade_profit": -84.92
+}

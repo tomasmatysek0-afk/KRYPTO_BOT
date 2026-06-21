@@ -235,6 +235,38 @@ Local Phase 06 output:
 - real Coinbase/Freqtrade data parity;
 - dry-run runtime validation.
 
+## Phase 07 Local Offline Report Bundle
+
+These checks are valid in `NO_DOCKER_LOCAL_MODE`.
+
+```powershell
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe scripts\run_backtest_report.py
+
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest tests\test_backtest_validation.py
+
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest
+
+# [LOCAL_VENV]
+.\.venv\Scripts\ruff.exe check .
+
+# [HOST_POWERSHELL]
+powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets
+```
+
+Local Phase 07 output:
+
+- `reports/backtests/2026-06-21_strategy_summary.md`;
+- `reports/backtests/2026-06-21_trades.csv`;
+- `reports/backtests/2026-06-21_metrics.json`;
+- `reports/backtests/2026-06-21_drawdown.csv`;
+- `reports/backtests/2026-06-21_walkforward.json`;
+- `reports/backtests/2026-06-21_montecarlo.json`.
+
+The CSV files are deterministic mock report artifacts and are not real exchange exports. They are safe to regenerate locally with the script above. Phase 07 still does not run Freqtrade, download market data, access credentials, create orders, or validate dry-run runtime behavior.
+
 ## Deferred Docker Validation
 
 Status: `DEFERRED_DOCKER_REQUIRED`.

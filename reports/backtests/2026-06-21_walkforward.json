@@ -1,0 +1,42 @@
+{
+  "aggregated_max_drawdown": 0.0084435005329388,
+  "aggregated_profit": 218.05,
+  "conclusion": "PASS",
+  "losing_windows": 1,
+  "number_of_windows": 3,
+  "profitable_windows": 2,
+  "test_window_days": 5,
+  "train_window_days": 14,
+  "window_results": [
+    {
+      "max_drawdown": 0.0084435005329388,
+      "profitable": false,
+      "test_window_days": 6,
+      "total_profit": -5.984,
+      "total_return": -0.0005984,
+      "trade_count": 3,
+      "train_window_days": 14,
+      "window_id": "mock-bull-window"
+    },
+    {
+      "max_drawdown": 0.002590411300896594,
+      "profitable": true,
+      "test_window_days": 5,
+      "total_profit": 147.705,
+      "total_return": 0.0147705,
+      "trade_count": 2,
+      "train_window_days": 14,
+      "window_id": "mock-sideways-window"
+    },
+    {
+      "max_drawdown": 0.0,
+      "profitable": true,
+      "test_window_days": 4,
+      "total_profit": 76.329,
+      "total_return": 0.0076329,
+      "trade_count": 1,
+      "train_window_days": 14,
+      "window_id": "mock-out-of-sample-window"
+    }
+  ]
+}

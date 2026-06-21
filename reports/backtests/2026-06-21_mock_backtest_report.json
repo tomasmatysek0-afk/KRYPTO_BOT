@@ -96,6 +96,7 @@
     "starting_equity": 10000.0,
     "total_return": 0.021805
   },
+  "exposure": 0.42857142857142855,
   "fee_model": "mock roundtrip fee scenarios only; no exchange execution",
   "fee_slippage_sensitivity": [
     {

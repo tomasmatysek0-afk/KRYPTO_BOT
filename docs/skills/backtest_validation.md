@@ -10,6 +10,21 @@ Backtests must account for fees, slippage, data quality, drawdown, out-of-sample
 
 ## Findings
 
+### 2026-06-21 - Phase 07 local report bundle
+Source:
+- CODEX_MASTER_PLAN.md
+- `scripts/run_backtest_report.py`
+- `src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py`
+
+Summary:
+The Phase 07 report layer generates a deterministic local bundle from the Phase 06 mock report payload. The bundle includes strategy summary markdown, trade CSV, metrics JSON, drawdown CSV, walk-forward JSON, and Monte Carlo JSON.
+
+Decision impact:
+The report layer is usable without API keys, network access, Docker, Freqtrade runtime execution, live trading, or dry-run runtime validation. CSV outputs are mock report artifacts, not exchange exports or real runtime data.
+
+Open questions:
+- None for the local/offline report bundle. Real Freqtrade backtest and dry-run report integration remain deferred.
+
 ### 2026-06-21 - Phase 06 local/offline validation
 Source:
 - CODEX_MASTER_PLAN.md

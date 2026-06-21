@@ -2,13 +2,13 @@
 
 ## STATUS SUMMARY
 
-Current phase: 06 - Advanced backtest validation local/offline slice
-Active agent: quant-research-agent
-Last update: 2026-06-21 13:27
-State: LOCAL_OFFLINE_PASS / DEFERRED_DOCKER_REQUIRED
+Current phase: 07 - Report layer local/offline slice
+Active agent: quant-research-agent + sre-agent
+Last update: 2026-06-21 13:34
+State: LOCAL_OFFLINE_PASS
 Current branch: main
-Current commit: a66eef4
-Note: Phase 06 local/offline metrics and mock reports pass; real Freqtrade/Docker runtime validation remains `DEFERRED_DOCKER_REQUIRED`.
+Current commit: 9e2d4bc
+Note: Phase 07 local/offline report bundle generation passes; Phase 08 Docker/Freqtrade dry-run runtime remains `DEFERRED_DOCKER_REQUIRED`.
 
 ## OPEN QUESTIONS
 
@@ -28,7 +28,7 @@ Note: Phase 06 local/offline metrics and mock reports pass; real Freqtrade/Docke
 | 05 | Baseline strategy V1 | LOCAL_STATIC_DONE_RUNTIME_DEFERRED | - | Strategy skeleton and static sanity tests pass; Freqtrade runtime import/backtest deferred. |
 | 05b | Minimal Guard Core | DONE | 2026-06-21 | Typed guard models, kill-switch, audit writer, risk limits, and tests pass. |
 | 06 | Advanced backtest validation | LOCAL_OFFLINE_PASS_DOCKER_DEFERRED | 2026-06-21 | Deterministic local metrics and mock reports pass; real Freqtrade/Docker/runtime items remain deferred, not passed. |
-| 07 | Report layer | TODO | - | Not started. |
+| 07 | Report layer | LOCAL_OFFLINE_PASS | 2026-06-21 | Deterministic local report bundle outputs pass; no real Freqtrade backtest or dry-run runtime validation. |
 | 08 | Dry-run / paper trading | TODO | - | Not started. |
 | 08b | Fault Injection | TODO | - | POST_MVRS safety hardening. |
 | 09 | Guard layer | TODO | - | Not started. |
@@ -120,6 +120,61 @@ Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
 Tests: Phase 06 targeted PASS; full pytest PASS; Ruff PASS; pip check PASS; no-secret scan PASS; diff check PASS with line-ending warnings only.
 Identified risks: Real Freqtrade strategy backtesting and real out-of-sample market-data results are not validated locally and must remain deferred.
 Next safe step: `[HOST_POWERSHELL] git add src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py scripts/run_backtest_report.py tests/test_backtest_validation.py docs/RUNBOOK.md docs/skills/backtest_validation.md reports/backtests/2026-06-21_mock_backtest_report.md reports/backtests/2026-06-21_mock_backtest_report.json LOG.md PROJECT_STATE.md`
+
+### 2026-06-21 13:29 - Phase 07 - quant-research-agent + sre-agent
+**Action:** Started Phase 07 Report Layer as a local/offline-only slice after Phase 06 commit `9e2d4bc` was pushed to `origin/main`.
+**Files read:** CODEX_MASTER_PLAN.md Phase 07 section; AGENTS.md; LOG.md; PROJECT_STATE.md; scripts/run_backtest_report.py; src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py; tests/test_backtest_validation.py.
+**Files modified:** LOG.md; PROJECT_STATE.md.
+**Commands run:** `[HOST_POWERSHELL] git push origin main`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] git rev-parse --short HEAD`; `[HOST_POWERSHELL] Get-Content`; `[HOST_POWERSHELL] Get-Date`.
+**Tests:** Pending Phase 07 implementation.
+**Research:** No network research required. Phase 07 will reuse deterministic Phase 06 mock/sample data.
+**Decision:** Extend the local report generator to produce the Phase 07 bundle outputs without API keys, network, Docker, Freqtrade runtime execution, live trading, or dry-run runtime claims.
+**Result:** PARTIAL
+**Next step:** Add report bundle writers, script options, tests, and runbook updates.
+
+### CHECKPOINT - 2026-06-21 13:29 - Phase 07
+State: IN_PROGRESS
+Done: Phase 07 local/offline scope selected; current commit verified as `9e2d4bc`.
+In progress: Implementing deterministic report bundle outputs.
+Files changed since last checkpoint: LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Phase 07 output must remain mock/offline and must not imply real Freqtrade backtest, real market-data validation, or dry-run validation.
+Next safe step: Extend `scripts/run_backtest_report.py` and report writer tests.
+
+### CHECKPOINT - 2026-06-21 13:34 - Phase 07
+State: IN_PROGRESS
+Done: Added Phase 07 report bundle writers, script output options, deterministic summary/metrics/walkforward/montecarlo JSON, trades/drawdown CSV outputs, artifact tests, and runbook/backtest-validation notes.
+In progress: Full local validation.
+Files changed since last checkpoint: src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py; scripts/run_backtest_report.py; tests/test_backtest_validation.py; docs/RUNBOOK.md; docs/skills/backtest_validation.md; reports/backtests/2026-06-21_strategy_summary.md; reports/backtests/2026-06-21_trades.csv; reports/backtests/2026-06-21_metrics.json; reports/backtests/2026-06-21_drawdown.csv; reports/backtests/2026-06-21_walkforward.json; reports/backtests/2026-06-21_montecarlo.json; reports/backtests/2026-06-21_mock_backtest_report.md; reports/backtests/2026-06-21_mock_backtest_report.json; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_backtest_validation.py` (14 tests); PASS - touched-file Ruff; PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe scripts\run_backtest_report.py`.
+Identified risks: CSV files are deterministic mock report artifacts, not real exchange exports; real runtime integration remains deferred.
+Next safe step: Run full pytest, full Ruff, pip check, no-secret scan, and git diff check.
+
+### 2026-06-21 13:34 - Phase 07 - quant-research-agent + sre-agent
+**Action:** Completed Phase 07 local/offline report layer.
+**Files read:** CODEX_MASTER_PLAN.md Phase 07 section; AGENTS.md; LOG.md; PROJECT_STATE.md; scripts/run_backtest_report.py; src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py; tests/test_backtest_validation.py; generated report bundle artifacts.
+**Files modified:** src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py; scripts/run_backtest_report.py; tests/test_backtest_validation.py; docs/RUNBOOK.md; docs/skills/backtest_validation.md; reports/backtests/2026-06-21_strategy_summary.md; reports/backtests/2026-06-21_trades.csv; reports/backtests/2026-06-21_metrics.json; reports/backtests/2026-06-21_drawdown.csv; reports/backtests/2026-06-21_walkforward.json; reports/backtests/2026-06-21_montecarlo.json; reports/backtests/2026-06-21_mock_backtest_report.md; reports/backtests/2026-06-21_mock_backtest_report.json; LOG.md; PROJECT_STATE.md.
+**Commands run:** `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_backtest_validation.py`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check src\coinbase_freqtrade_guarded_bot\research\backtest_validation.py scripts\run_backtest_report.py tests\test_backtest_validation.py`; `[LOCAL_VENV] .\.venv\Scripts\python.exe scripts\run_backtest_report.py`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check .`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pip check`; `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`; `[HOST_POWERSHELL] git diff --check`.
+**Tests:** PASS - Phase 07 targeted tests 14 tests; PASS - full pytest 69 tests; PASS - Ruff; PASS - pip check; PASS - no-secret scan; PASS - git diff --check with line-ending warnings only.
+**Research:** No network research required. The report bundle is deterministic and uses mock Phase 06 sample data only.
+**Decision:** Phase 07 is `LOCAL_OFFLINE_PASS`. The script runs without API keys, Docker, network, live trading, or Freqtrade runtime execution. Phase 08 dry-run runtime remains `DEFERRED_DOCKER_REQUIRED`.
+**Result:** LOCAL_OFFLINE_PASS
+**Next step:** Commit and push `phase-07: add offline report bundle`. Do not mark Phase 08 passed while Docker/Freqtrade dry-run is unavailable.
+
+### CHECKPOINT - 2026-06-21 13:34 - Phase 07
+State: LOCAL_OFFLINE_PASS
+Done: Phase 07 report script writes strategy summary markdown, trades CSV, metrics JSON, drawdown CSV, walk-forward JSON, Monte Carlo JSON, and combined markdown/JSON reports from deterministic mock data. Targeted/full tests and quality checks pass.
+In progress: Commit and push pending.
+Files changed since last checkpoint: src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py; scripts/run_backtest_report.py; tests/test_backtest_validation.py; docs/RUNBOOK.md; docs/skills/backtest_validation.md; reports/backtests/2026-06-21_strategy_summary.md; reports/backtests/2026-06-21_trades.csv; reports/backtests/2026-06-21_metrics.json; reports/backtests/2026-06-21_drawdown.csv; reports/backtests/2026-06-21_walkforward.json; reports/backtests/2026-06-21_montecarlo.json; reports/backtests/2026-06-21_mock_backtest_report.md; reports/backtests/2026-06-21_mock_backtest_report.json; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending final check.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: Phase 07 targeted PASS; full pytest PASS; Ruff PASS; pip check PASS; no-secret scan PASS; diff check PASS with line-ending warnings only.
+Identified risks: Phase 08 requires real dry-run runtime and remains deferred in `NO_DOCKER_LOCAL_MODE`.
+Next safe step: `[HOST_POWERSHELL] git add src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py scripts/run_backtest_report.py tests/test_backtest_validation.py docs/RUNBOOK.md docs/skills/backtest_validation.md reports/backtests/2026-06-21_strategy_summary.md reports/backtests/2026-06-21_metrics.json reports/backtests/2026-06-21_walkforward.json reports/backtests/2026-06-21_montecarlo.json reports/backtests/2026-06-21_mock_backtest_report.md reports/backtests/2026-06-21_mock_backtest_report.json LOG.md PROJECT_STATE.md; git add -f reports/backtests/2026-06-21_trades.csv reports/backtests/2026-06-21_drawdown.csv`
 
 ### 2026-06-21 12:19 - Phase 05b - guard-agent
 **Action:** Started Phase 05b Minimal Guard Core after Phase 05 commit `ba8528c` was pushed to `origin/main`.

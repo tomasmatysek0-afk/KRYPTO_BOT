@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 import json
 import random
 from dataclasses import dataclass, fields, is_dataclass
@@ -320,6 +321,7 @@ class OfflineBacktestReport:
     generated_at: datetime
     fee_model: str
     slippage_model: str
+    exposure: Decimal
     trades: tuple[TradeResult, ...]
     equity_curve: tuple[EquityPoint, ...]
     trade_metrics: TradeMetrics
@@ -341,6 +343,18 @@ class OfflineBacktestReport:
     def to_markdown(self) -> str:
         """Render this report as markdown."""
         return render_markdown_report(self)
+
+
+@dataclass(frozen=True, slots=True)
+class ReportBundlePaths:
+    """Filesystem paths written by the Phase 07 local report bundle."""
+
+    strategy_summary: Path
+    trades_csv: Path
+    metrics_json: Path
+    drawdown_csv: Path
+    walkforward_json: Path
+    montecarlo_json: Path
 
 
 def calculate_trade_metrics(trades: tuple[TradeResult, ...] | list[TradeResult]) -> TradeMetrics:
@@ -649,6 +663,11 @@ def build_offline_backtest_report(
         raise BacktestValidationError("report pairs must be limited to BTC/USD and ETH/USD.")
     trade_metrics = calculate_trade_metrics(trades)
     equity_metrics = calculate_equity_curve_metrics(equity_curve)
+    exposure = calculate_exposure_ratio(
+        trades,
+        start=equity_curve[0].timestamp,
+        end=equity_curve[-1].timestamp,
+    )
     buy_and_hold = calculate_buy_and_hold(
         buy_and_hold_prices,
         initial_cash=initial_equity,
@@ -682,6 +701,7 @@ def build_offline_backtest_report(
         generated_at=_as_utc(generated_at),
         fee_model="mock roundtrip fee scenarios only; no exchange execution",
         slippage_model="mock local slippage scenarios only; no exchange execution",
+        exposure=exposure,
         trades=trades,
         equity_curve=equity_curve,
         trade_metrics=trade_metrics,
@@ -732,6 +752,8 @@ def render_markdown_report(report: OfflineBacktestReport) -> str:
         f"Generated at: `{report.generated_at.isoformat()}`",
         f"Pairs: `{', '.join(report.pairs)}`",
         f"Timeframe: `{report.timeframe}`",
+        f"Fee model: {report.fee_model}",
+        f"Slippage model: {report.slippage_model}",
         f"Data source decision: {report.data_source_decision}",
         f"Local acceptance: `{report.local_acceptance_status}`",
         f"Deferred runtime status: `{report.deferred_status}`",
@@ -748,7 +770,10 @@ def render_markdown_report(report: OfflineBacktestReport) -> str:
         f"- Win rate: {_format_rate(metrics.win_rate)}",
         f"- Average profit/trade: {_format_money(metrics.average_profit_per_trade)}",
         f"- Number of trades: {metrics.trade_count}",
+        f"- Exposure: {_format_rate(report.exposure)}",
         f"- Max loss streak: {metrics.max_loss_streak}",
+        f"- Best trade: {_format_money(metrics.best_trade_profit)}",
+        f"- Worst trade: {_format_money(metrics.worst_trade_profit)}",
         f"- Buy-and-hold total return: {_format_rate(report.buy_and_hold.total_return)}",
         "",
         "## Fee And Slippage Sensitivity",
@@ -848,11 +873,130 @@ def write_markdown_report(report: OfflineBacktestReport, output_path: Path) -> N
 
 def write_json_report(report: OfflineBacktestReport, output_path: Path) -> None:
     """Write a local/offline backtest report to JSON."""
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(
-        json.dumps(report.to_json_dict(), indent=2, sort_keys=True),
-        encoding="utf-8",
+    _write_json_payload(report.to_json_dict(), output_path)
+
+
+def write_report_bundle(
+    report: OfflineBacktestReport,
+    output_dir: Path,
+    *,
+    report_date: str,
+) -> ReportBundlePaths:
+    """Write the Phase 07 local report bundle and return all output paths."""
+    if not report_date or "/" in report_date or "\\" in report_date or ".." in report_date:
+        raise BacktestValidationError("report_date must be a safe filename prefix.")
+    paths = ReportBundlePaths(
+        strategy_summary=output_dir / f"{report_date}_strategy_summary.md",
+        trades_csv=output_dir / f"{report_date}_trades.csv",
+        metrics_json=output_dir / f"{report_date}_metrics.json",
+        drawdown_csv=output_dir / f"{report_date}_drawdown.csv",
+        walkforward_json=output_dir / f"{report_date}_walkforward.json",
+        montecarlo_json=output_dir / f"{report_date}_montecarlo.json",
     )
+    write_markdown_report(report, paths.strategy_summary)
+    write_trades_csv(report, paths.trades_csv)
+    write_metrics_json(report, paths.metrics_json)
+    write_drawdown_csv(report, paths.drawdown_csv)
+    write_walkforward_json(report, paths.walkforward_json)
+    write_montecarlo_json(report, paths.montecarlo_json)
+    return paths
+
+
+def write_trades_csv(report: OfflineBacktestReport, output_path: Path) -> None:
+    """Write closed local mock trades to CSV."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", encoding="utf-8", newline="") as csv_file:
+        fieldnames = [
+            "trade_id",
+            "pair",
+            "opened_at",
+            "closed_at",
+            "enter_tag",
+            "entry_price",
+            "exit_price",
+            "quantity",
+            "gross_profit",
+            "total_costs",
+            "net_profit",
+            "return_rate",
+        ]
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        for trade in report.trades:
+            writer.writerow(
+                {
+                    "trade_id": trade.trade_id,
+                    "pair": trade.pair,
+                    "opened_at": trade.opened_at.isoformat(),
+                    "closed_at": trade.closed_at.isoformat(),
+                    "enter_tag": trade.enter_tag,
+                    "entry_price": str(trade.entry_price),
+                    "exit_price": str(trade.exit_price),
+                    "quantity": str(trade.quantity),
+                    "gross_profit": str(trade.gross_profit),
+                    "total_costs": str(trade.total_costs),
+                    "net_profit": str(trade.net_profit),
+                    "return_rate": str(trade.return_rate),
+                }
+            )
+
+
+def write_drawdown_csv(report: OfflineBacktestReport, output_path: Path) -> None:
+    """Write the local mock drawdown curve to CSV."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with output_path.open("w", encoding="utf-8", newline="") as csv_file:
+        fieldnames = ["timestamp", "equity", "drawdown"]
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        writer.writeheader()
+        for equity_point, drawdown_point in zip(
+            report.equity_curve,
+            report.equity_metrics.drawdown_curve,
+            strict=True,
+        ):
+            writer.writerow(
+                {
+                    "timestamp": equity_point.timestamp.isoformat(),
+                    "equity": str(equity_point.equity),
+                    "drawdown": str(drawdown_point.drawdown),
+                }
+            )
+
+
+def write_metrics_json(report: OfflineBacktestReport, output_path: Path) -> None:
+    """Write the Phase 07 core metrics JSON payload."""
+    payload = {
+        "strategy_name": report.strategy_name,
+        "config_version": report.config_version,
+        "data_source_decision": report.data_source_decision,
+        "pairs": report.pairs,
+        "timeframe": report.timeframe,
+        "fee_model": report.fee_model,
+        "slippage_model": report.slippage_model,
+        "number_of_trades": report.trade_metrics.trade_count,
+        "max_drawdown": report.equity_metrics.max_drawdown,
+        "buy_and_hold": report.buy_and_hold,
+        "best_trade_profit": report.trade_metrics.best_trade_profit,
+        "worst_trade_profit": report.trade_metrics.worst_trade_profit,
+        "monthly_returns": report.equity_metrics.monthly_returns,
+        "enter_tag_aggregation": report.trade_metrics.enter_tag_breakdown,
+        "exposure": report.exposure,
+        "conclusion": report.conclusion,
+        "local_acceptance_status": report.local_acceptance_status,
+        "deferred_status": report.deferred_status,
+        "deferred_items": report.deferred_items,
+        "disclaimer": report.disclaimer,
+    }
+    _write_json_payload(payload, output_path)
+
+
+def write_walkforward_json(report: OfflineBacktestReport, output_path: Path) -> None:
+    """Write the Phase 07 walk-forward JSON payload."""
+    _write_json_payload(report.walk_forward, output_path)
+
+
+def write_montecarlo_json(report: OfflineBacktestReport, output_path: Path) -> None:
+    """Write the Phase 07 Monte Carlo JSON payload."""
+    _write_json_payload(report.monte_carlo, output_path)
 
 
 def _sample_trades() -> tuple[TradeResult, ...]:
@@ -1252,6 +1396,14 @@ def _to_jsonable(value: Any) -> Any:
     if isinstance(value, dict):
         return {str(key): _to_jsonable(item) for key, item in value.items()}
     return value
+
+
+def _write_json_payload(payload: Any, output_path: Path) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(
+        json.dumps(_to_jsonable(payload), indent=2, sort_keys=True),
+        encoding="utf-8",
+    )
 
 
 def _format_money(value: Decimal) -> str:

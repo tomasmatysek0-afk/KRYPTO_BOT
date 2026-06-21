@@ -1,0 +1,14 @@
+{
+  "number_of_simulations": 250,
+  "percentile_cagr_5": 0.754840929171,
+  "percentile_cagr_50": 0.754840929171,
+  "percentile_cagr_95": 0.754840929171,
+  "percentile_max_drawdown_5": 0.00824228353571834,
+  "percentile_max_drawdown_50": 0.008492,
+  "percentile_max_drawdown_95": 0.0111275,
+  "probability_drawdown_above_limit": 0.0,
+  "probability_negative_result_after_costs": 0.0,
+  "sampling_mode": "shuffle",
+  "seed": 20260621,
+  "worst_simulated_drawdown": 0.0111275
+}

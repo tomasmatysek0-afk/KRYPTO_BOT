@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from datetime import UTC, datetime
 from decimal import Decimal
 from pathlib import Path
@@ -25,6 +26,7 @@ from coinbase_freqtrade_guarded_bot.research.backtest_validation import (
     run_fee_slippage_sensitivity,
     write_json_report,
     write_markdown_report,
+    write_report_bundle,
 )
 
 
@@ -323,6 +325,44 @@ def test_report_generation_contains_local_pass_and_docker_deferred(tmp_path: Pat
     assert len(payload["fee_slippage_sensitivity"]) == 5
 
 
+def test_phase07_report_bundle_outputs_required_files(tmp_path: Path) -> None:
+    """Phase 07 bundle writer creates readable local markdown, CSV, and JSON outputs."""
+    report = build_sample_offline_report()
+
+    paths = write_report_bundle(report, tmp_path, report_date="2026-06-21")
+
+    assert paths.strategy_summary.exists()
+    assert paths.trades_csv.exists()
+    assert paths.metrics_json.exists()
+    assert paths.drawdown_csv.exists()
+    assert paths.walkforward_json.exists()
+    assert paths.montecarlo_json.exists()
+
+    summary = paths.strategy_summary.read_text(encoding="utf-8")
+    trades_csv = paths.trades_csv.read_text(encoding="utf-8")
+    drawdown_csv = paths.drawdown_csv.read_text(encoding="utf-8")
+    metrics_payload = json.loads(paths.metrics_json.read_text(encoding="utf-8"))
+    walkforward_payload = json.loads(paths.walkforward_json.read_text(encoding="utf-8"))
+    montecarlo_payload = json.loads(paths.montecarlo_json.read_text(encoding="utf-8"))
+
+    assert "Strategy: `CoinbaseTrendGuardV1`" in summary
+    assert "Fee model:" in summary
+    assert "Slippage model:" in summary
+    assert "Best trade:" in summary
+    assert "Worst trade:" in summary
+    assert "DEFERRED_DOCKER_REQUIRED" in summary
+    assert "trade_id,pair,opened_at,closed_at,enter_tag" in trades_csv
+    assert "mock-001" in trades_csv
+    assert "timestamp,equity,drawdown" in drawdown_csv
+    assert metrics_payload["strategy_name"] == "CoinbaseTrendGuardV1"
+    assert metrics_payload["number_of_trades"] == 6
+    assert isinstance(metrics_payload["max_drawdown"], float)
+    assert isinstance(metrics_payload["buy_and_hold"], dict)
+    assert metrics_payload["deferred_status"] == "DEFERRED_DOCKER_REQUIRED"
+    assert walkforward_payload["number_of_windows"] == 3
+    assert montecarlo_payload["number_of_simulations"] == 250
+
+
 def test_mock_backtest_report_artifacts_exist() -> None:
     """Phase 06 includes checked-in deterministic local report artifacts."""
     repo_root = Path(__file__).resolve().parents[1]
@@ -336,3 +376,33 @@ def test_mock_backtest_report_artifacts_exist() -> None:
     assert "LOCAL_OFFLINE_PASS" in markdown
     assert "DEFERRED_DOCKER_REQUIRED" in markdown
     assert '"number_of_simulations": 250' in json_payload
+
+
+def test_phase07_backtest_report_bundle_artifacts_exist() -> None:
+    """Phase 07 includes checked-in deterministic local report bundle artifacts."""
+    repo_root = Path(__file__).resolve().parents[1]
+    report_dir = repo_root / "reports" / "backtests"
+    expected_paths = (
+        report_dir / "2026-06-21_strategy_summary.md",
+        report_dir / "2026-06-21_trades.csv",
+        report_dir / "2026-06-21_metrics.json",
+        report_dir / "2026-06-21_drawdown.csv",
+        report_dir / "2026-06-21_walkforward.json",
+        report_dir / "2026-06-21_montecarlo.json",
+    )
+
+    for path in expected_paths:
+        assert path.exists(), path
+
+    summary = expected_paths[0].read_text(encoding="utf-8")
+    trades_csv = expected_paths[1].read_text(encoding="utf-8")
+    metrics_payload = json.loads(expected_paths[2].read_text(encoding="utf-8"))
+    walkforward_payload = json.loads(expected_paths[4].read_text(encoding="utf-8"))
+    montecarlo_payload = json.loads(expected_paths[5].read_text(encoding="utf-8"))
+
+    assert "Conclusion: `RESEARCH_ONLY`" in summary
+    assert "mock-001" in trades_csv
+    assert metrics_payload["number_of_trades"] == 6
+    assert metrics_payload["deferred_status"] == "DEFERRED_DOCKER_REQUIRED"
+    assert walkforward_payload["number_of_windows"] == 3
+    assert montecarlo_payload["number_of_simulations"] == 250
