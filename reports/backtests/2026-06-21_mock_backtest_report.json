@@ -1,0 +1,323 @@
+{
+  "buy_and_hold": {
+    "cagr": 5.093743480533,
+    "ending_price": 10750.0,
+    "ending_value": 10717.787600824588,
+    "quantity": 0.9985007496251874,
+    "starting_price": 10000.0,
+    "total_profit": 717.7876008245877,
+    "total_return": 0.07177876008245877
+  },
+  "conclusion": "RESEARCH_ONLY",
+  "config_version": "phase-06-local-offline-sample",
+  "data_source_decision": "ADR-002 provisional: Coinbase Advanced Trade candidate raw source; Freqtrade engine candidate pending real parity and Docker checks.",
+  "deferred_items": [
+    "real Freqtrade backtest execution",
+    "real strategy runtime loading inside Freqtrade",
+    "Docker-based Freqtrade backtest",
+    "Docker-based data download",
+    "real Coinbase/Freqtrade data parity",
+    "dry-run runtime validation"
+  ],
+  "deferred_status": "DEFERRED_DOCKER_REQUIRED",
+  "disclaimer": "Research-only offline sample report. This is not financial advice, not a profit guarantee, and not evidence that real Freqtrade backtesting or dry-run runtime validation has passed.",
+  "equity_curve": [
+    {
+      "equity": 10000.0,
+      "timestamp": "2026-01-01T00:00:00+00:00"
+    },
+    {
+      "equity": 10057.44,
+      "timestamp": "2026-01-02T00:00:00+00:00"
+    },
+    {
+      "equity": 9972.52,
+      "timestamp": "2026-01-04T00:00:00+00:00"
+    },
+    {
+      "equity": 9994.016,
+      "timestamp": "2026-01-06T00:00:00+00:00"
+    },
+    {
+      "equity": 10168.076,
+      "timestamp": "2026-01-09T00:00:00+00:00"
+    },
+    {
+      "equity": 10141.721,
+      "timestamp": "2026-01-12T00:00:00+00:00"
+    },
+    {
+      "equity": 10218.05,
+      "timestamp": "2026-01-15T00:00:00+00:00"
+    }
+  ],
+  "equity_metrics": {
+    "cagr": 0.754840929171,
+    "drawdown_curve": [
+      {
+        "drawdown": 0.0,
+        "timestamp": "2026-01-01T00:00:00+00:00"
+      },
+      {
+        "drawdown": 0.0,
+        "timestamp": "2026-01-02T00:00:00+00:00"
+      },
+      {
+        "drawdown": 0.0084435005329388,
+        "timestamp": "2026-01-04T00:00:00+00:00"
+      },
+      {
+        "drawdown": 0.006306177317488347,
+        "timestamp": "2026-01-06T00:00:00+00:00"
+      },
+      {
+        "drawdown": 0.0,
+        "timestamp": "2026-01-09T00:00:00+00:00"
+      },
+      {
+        "drawdown": 0.0025919357801810292,
+        "timestamp": "2026-01-12T00:00:00+00:00"
+      },
+      {
+        "drawdown": 0.0,
+        "timestamp": "2026-01-15T00:00:00+00:00"
+      }
+    ],
+    "ending_equity": 10218.05,
+    "max_drawdown": 0.0084435005329388,
+    "monthly_returns": [
+      {
+        "return_rate": 0.021805,
+        "year_month": "2026-01"
+      }
+    ],
+    "sharpe": 5.105423275546372,
+    "sortino": 13.379564903996744,
+    "starting_equity": 10000.0,
+    "total_return": 0.021805
+  },
+  "fee_model": "mock roundtrip fee scenarios only; no exchange execution",
+  "fee_slippage_sensitivity": [
+    {
+      "average_profit_per_trade": 35.6875,
+      "fee_rate": 0.001,
+      "name": "base_fee",
+      "profit_factor": 2.9039679893297765,
+      "slippage_rate": 0.0005,
+      "total_profit": 214.125,
+      "total_return": 0.0214125,
+      "win_rate": 0.6666666666666666
+    },
+    {
+      "average_profit_per_trade": 29.9375,
+      "fee_rate": 0.003,
+      "name": "worst_fee",
+      "profit_factor": 2.467374655366078,
+      "slippage_rate": 0.0005,
+      "total_profit": 179.625,
+      "total_return": 0.0179625,
+      "win_rate": 0.6666666666666666
+    },
+    {
+      "average_profit_per_trade": 35.6875,
+      "fee_rate": 0.001,
+      "name": "slippage_low",
+      "profit_factor": 2.9039679893297765,
+      "slippage_rate": 0.0005,
+      "total_profit": 214.125,
+      "total_return": 0.0214125,
+      "win_rate": 0.6666666666666666
+    },
+    {
+      "average_profit_per_trade": 32.8125,
+      "fee_rate": 0.001,
+      "name": "slippage_medium",
+      "profit_factor": 2.6764236295902077,
+      "slippage_rate": 0.0015,
+      "total_profit": 196.875,
+      "total_return": 0.0196875,
+      "win_rate": 0.6666666666666666
+    },
+    {
+      "average_profit_per_trade": 28.5,
+      "fee_rate": 0.001,
+      "name": "slippage_high",
+      "profit_factor": 2.369095276220977,
+      "slippage_rate": 0.003,
+      "total_profit": 171.0,
+      "total_return": 0.0171,
+      "win_rate": 0.6666666666666666
+    }
+  ],
+  "generated_at": "2026-06-21T13:16:00+00:00",
+  "local_acceptance_status": "LOCAL_OFFLINE_PASS",
+  "monte_carlo": {
+    "number_of_simulations": 250,
+    "percentile_cagr_5": 0.754840929171,
+    "percentile_cagr_50": 0.754840929171,
+    "percentile_cagr_95": 0.754840929171,
+    "percentile_max_drawdown_5": 0.00824228353571834,
+    "percentile_max_drawdown_50": 0.008492,
+    "percentile_max_drawdown_95": 0.0111275,
+    "probability_drawdown_above_limit": 0.0,
+    "probability_negative_result_after_costs": 0.0,
+    "sampling_mode": "shuffle",
+    "seed": 20260621,
+    "worst_simulated_drawdown": 0.0111275
+  },
+  "pairs": [
+    "BTC/USD",
+    "ETH/USD"
+  ],
+  "slippage_model": "mock local slippage scenarios only; no exchange execution",
+  "strategy_name": "CoinbaseTrendGuardV1",
+  "timeframe": "1h with 1d trend context",
+  "trade_metrics": {
+    "average_profit_per_trade": 36.34166666666667,
+    "best_trade_profit": 174.06,
+    "enter_tag_breakdown": [
+      {
+        "enter_tag": "trend_pullback",
+        "total_profit": 22.494,
+        "trade_count": 4
+      },
+      {
+        "enter_tag": "volume_confirmed",
+        "total_profit": 195.556,
+        "trade_count": 2
+      }
+    ],
+    "losing_trades": 2,
+    "max_loss_streak": 1,
+    "profit_factor": 2.9595596495169625,
+    "total_fees": 17.25,
+    "total_profit": 218.05,
+    "total_slippage": 4.7,
+    "trade_count": 6,
+    "win_rate": 0.6666666666666666,
+    "winning_trades": 4,
+    "worst_trade_profit": -84.92
+  },
+  "trades": [
+    {
+      "closed_at": "2026-01-02T00:00:00+00:00",
+      "enter_tag": "trend_pullback",
+      "entry_fee": 1.0,
+      "entry_price": 10000.0,
+      "exit_fee": 1.06,
+      "exit_price": 10600.0,
+      "opened_at": "2026-01-01T00:00:00+00:00",
+      "pair": "BTC/USD",
+      "quantity": 0.1,
+      "slippage_cost": 0.5,
+      "trade_id": "mock-001"
+    },
+    {
+      "closed_at": "2026-01-04T00:00:00+00:00",
+      "enter_tag": "trend_pullback",
+      "entry_fee": 2.0,
+      "entry_price": 2000.0,
+      "exit_fee": 1.92,
+      "exit_price": 1920.0,
+      "opened_at": "2026-01-03T00:00:00+00:00",
+      "pair": "ETH/USD",
+      "quantity": 1.0,
+      "slippage_cost": 1.0,
+      "trade_id": "mock-002"
+    },
+    {
+      "closed_at": "2026-01-06T00:00:00+00:00",
+      "enter_tag": "volume_confirmed",
+      "entry_fee": 0.84,
+      "entry_price": 10500.0,
+      "exit_fee": 0.864,
+      "exit_price": 10800.0,
+      "opened_at": "2026-01-05T00:00:00+00:00",
+      "pair": "BTC/USD",
+      "quantity": 0.08,
+      "slippage_cost": 0.8,
+      "trade_id": "mock-003"
+    },
+    {
+      "closed_at": "2026-01-09T00:00:00+00:00",
+      "enter_tag": "volume_confirmed",
+      "entry_fee": 2.28,
+      "entry_price": 1900.0,
+      "exit_fee": 2.46,
+      "exit_price": 2050.0,
+      "opened_at": "2026-01-08T00:00:00+00:00",
+      "pair": "ETH/USD",
+      "quantity": 1.2,
+      "slippage_cost": 1.2,
+      "trade_id": "mock-004"
+    },
+    {
+      "closed_at": "2026-01-12T00:00:00+00:00",
+      "enter_tag": "trend_pullback",
+      "entry_fee": 0.54,
+      "entry_price": 10800.0,
+      "exit_fee": 0.515,
+      "exit_price": 10300.0,
+      "opened_at": "2026-01-11T00:00:00+00:00",
+      "pair": "BTC/USD",
+      "quantity": 0.05,
+      "slippage_cost": 0.3,
+      "trade_id": "mock-005"
+    },
+    {
+      "closed_at": "2026-01-15T00:00:00+00:00",
+      "enter_tag": "trend_pullback",
+      "entry_fee": 1.845,
+      "entry_price": 2050.0,
+      "exit_fee": 1.926,
+      "exit_price": 2140.0,
+      "opened_at": "2026-01-14T00:00:00+00:00",
+      "pair": "ETH/USD",
+      "quantity": 0.9,
+      "slippage_cost": 0.9,
+      "trade_id": "mock-006"
+    }
+  ],
+  "walk_forward": {
+    "aggregated_max_drawdown": 0.0084435005329388,
+    "aggregated_profit": 218.05,
+    "conclusion": "PASS",
+    "losing_windows": 1,
+    "number_of_windows": 3,
+    "profitable_windows": 2,
+    "test_window_days": 5,
+    "train_window_days": 14,
+    "window_results": [
+      {
+        "max_drawdown": 0.0084435005329388,
+        "profitable": false,
+        "test_window_days": 6,
+        "total_profit": -5.984,
+        "total_return": -0.0005984,
+        "trade_count": 3,
+        "train_window_days": 14,
+        "window_id": "mock-bull-window"
+      },
+      {
+        "max_drawdown": 0.002590411300896594,
+        "profitable": true,
+        "test_window_days": 5,
+        "total_profit": 147.705,
+        "total_return": 0.0147705,
+        "trade_count": 2,
+        "train_window_days": 14,
+        "window_id": "mock-sideways-window"
+      },
+      {
+        "max_drawdown": 0.0,
+        "profitable": true,
+        "test_window_days": 4,
+        "total_profit": 76.329,
+        "total_return": 0.0076329,
+        "trade_count": 1,
+        "train_window_days": 14,
+        "window_id": "mock-out-of-sample-window"
+      }
+    ]
+  }
+}

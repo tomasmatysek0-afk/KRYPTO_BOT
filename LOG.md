@@ -2,13 +2,13 @@
 
 ## STATUS SUMMARY
 
-Current phase: 05b - Minimal Guard Core local slice
-Active agent: guard-agent
-Last update: 2026-06-21 12:19
-State: DONE
+Current phase: 06 - Advanced backtest validation local/offline slice
+Active agent: quant-research-agent
+Last update: 2026-06-21 13:27
+State: LOCAL_OFFLINE_PASS / DEFERRED_DOCKER_REQUIRED
 Current branch: main
-Current commit: ba8528c
-Note: Phase 05b Minimal Guard Core local implementation is complete and tested.
+Current commit: a66eef4
+Note: Phase 06 local/offline metrics and mock reports pass; real Freqtrade/Docker runtime validation remains `DEFERRED_DOCKER_REQUIRED`.
 
 ## OPEN QUESTIONS
 
@@ -27,7 +27,7 @@ Note: Phase 05b Minimal Guard Core local implementation is complete and tested.
 | 04 | Data source decision ADR | DONE | 2026-06-21 | ADR-002 provisionally accepted; final real-data source acceptance remains gated by Phase 03b runtime parity. |
 | 05 | Baseline strategy V1 | LOCAL_STATIC_DONE_RUNTIME_DEFERRED | - | Strategy skeleton and static sanity tests pass; Freqtrade runtime import/backtest deferred. |
 | 05b | Minimal Guard Core | DONE | 2026-06-21 | Typed guard models, kill-switch, audit writer, risk limits, and tests pass. |
-| 06 | Advanced backtest validation | TODO | - | Next phase; runtime backtest parts remain constrained by data/Docker deferrals. |
+| 06 | Advanced backtest validation | LOCAL_OFFLINE_PASS_DOCKER_DEFERRED | 2026-06-21 | Deterministic local metrics and mock reports pass; real Freqtrade/Docker/runtime items remain deferred, not passed. |
 | 07 | Report layer | TODO | - | Not started. |
 | 08 | Dry-run / paper trading | TODO | - | Not started. |
 | 08b | Fault Injection | TODO | - | POST_MVRS safety hardening. |
@@ -65,6 +65,61 @@ Note: Phase 05b Minimal Guard Core local implementation is complete and tested.
 - None.
 
 ## ENTRIES
+
+### 2026-06-21 13:16 - Phase 06 - quant-research-agent
+**Action:** Started Phase 06 Advanced Backtest Validation as a local/offline-only slice after Phase 05b commit `a66eef4` was already pushed to `origin/main`.
+**Files read:** CODEX_MASTER_PLAN.md Phase 06/07 sections; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/RUNBOOK.md; docs/skills/backtest_validation.md; pyproject.toml; existing package/test/script structure.
+**Files modified:** LOG.md; PROJECT_STATE.md.
+**Commands run:** `[HOST_POWERSHELL] Get-Content`; `[HOST_POWERSHELL] git status --short --branch`; `[HOST_POWERSHELL] git rev-parse --short HEAD`; `[HOST_POWERSHELL] Get-Date`; `[HOST_POWERSHELL] Get-ChildItem`.
+**Tests:** Pending Phase 06 implementation.
+**Research:** No network research required for deterministic local metric math. Real Freqtrade/runtime validation remains blocked by `NO_DOCKER_LOCAL_MODE`.
+**Decision:** Implement only local deterministic metric functions, fee/slippage sensitivity, Monte Carlo trade-order resampling, walk-forward sample reporting, buy-and-hold comparison, and markdown/JSON output. Mark real Freqtrade backtest, strategy runtime loading, Docker backtest/data download, real Coinbase/Freqtrade data parity, and dry-run validation as `DEFERRED_DOCKER_REQUIRED`.
+**Result:** PARTIAL
+**Next step:** Add offline metric/report module, sample report generator, and deterministic unit tests.
+
+### CHECKPOINT - 2026-06-21 13:16 - Phase 06
+State: IN_PROGRESS
+Done: Phase 06 local/offline scope selected; current commit verified as `a66eef4`.
+In progress: Implementing deterministic offline backtest metrics and report generation.
+Files changed since last checkpoint: LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`.
+Tests: Pending.
+Identified risks: Phase 06 must not claim real Freqtrade strategy backtesting, real market data results, or runtime validation passed.
+Next safe step: Add local metric/report code and unit tests.
+
+### CHECKPOINT - 2026-06-21 13:26 - Phase 06
+State: IN_PROGRESS
+Done: Added offline backtest validation metric module, deterministic report script, unit tests, checked-in sample markdown/JSON reports, runbook notes, and backtest validation notes.
+In progress: Full local validation.
+Files changed since last checkpoint: src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py; scripts/run_backtest_report.py; tests/test_backtest_validation.py; docs/RUNBOOK.md; docs/skills/backtest_validation.md; reports/backtests/2026-06-21_mock_backtest_report.md; reports/backtests/2026-06-21_mock_backtest_report.json; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_backtest_validation.py` (12 tests); PASS - touched-file Ruff; PASS - `[LOCAL_VENV] .\.venv\Scripts\python.exe scripts\run_backtest_report.py`.
+Identified risks: Sample CAGR is from short deterministic mock data and is not a real market-data strategy result; report conclusion remains `RESEARCH_ONLY` and runtime items remain `DEFERRED_DOCKER_REQUIRED`.
+Next safe step: Run full pytest, full Ruff, pip check, no-secret scan, and git diff check.
+
+### 2026-06-21 13:27 - Phase 06 - quant-research-agent
+**Action:** Completed Phase 06 local/offline advanced backtest validation slice.
+**Files read:** CODEX_MASTER_PLAN.md Phase 06/07 sections; AGENTS.md; LOG.md; PROJECT_STATE.md; docs/RUNBOOK.md; docs/skills/backtest_validation.md; pyproject.toml; existing package/test/script structure; generated mock report artifacts.
+**Files modified:** src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py; scripts/run_backtest_report.py; tests/test_backtest_validation.py; docs/RUNBOOK.md; docs/skills/backtest_validation.md; reports/backtests/2026-06-21_mock_backtest_report.md; reports/backtests/2026-06-21_mock_backtest_report.json; LOG.md; PROJECT_STATE.md.
+**Commands run:** `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest tests\test_backtest_validation.py`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check src\coinbase_freqtrade_guarded_bot\research\backtest_validation.py scripts\run_backtest_report.py tests\test_backtest_validation.py`; `[LOCAL_VENV] .\.venv\Scripts\python.exe scripts\run_backtest_report.py`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pytest`; `[LOCAL_VENV] .\.venv\Scripts\ruff.exe check .`; `[LOCAL_VENV] .\.venv\Scripts\python.exe -m pip check`; `[HOST_POWERSHELL] powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets`; `[HOST_POWERSHELL] git diff --check`.
+**Tests:** PASS - Phase 06 targeted tests 12 tests; PASS - full pytest 67 tests; PASS - Ruff; PASS - pip check; PASS - no-secret scan; PASS - git diff --check with line-ending warnings only.
+**Research:** No network research required. This was deterministic local validation math over mock inputs.
+**Decision:** Phase 06 acceptance is split: `LOCAL_OFFLINE_PASS` for deterministic metric functions and mock report generation; `DEFERRED_DOCKER_REQUIRED` for real Freqtrade backtest execution, real strategy runtime loading, Docker-based backtest/data download, real Coinbase/Freqtrade parity, and dry-run runtime validation.
+**Result:** LOCAL_OFFLINE_PASS_DOCKER_DEFERRED
+**Next step:** Commit and push `phase-06: add offline backtest metrics`; then continue Phase 07 local report layer if still safe.
+
+### CHECKPOINT - 2026-06-21 13:27 - Phase 06
+State: LOCAL_OFFLINE_PASS_DOCKER_DEFERRED
+Done: Deterministic trade-list/equity metrics, fee/slippage sensitivity, Monte Carlo trade-order resampling, walk-forward mock reporting, buy-and-hold comparison, markdown/JSON report generation, docs, checked-in sample artifacts, and local tests pass.
+In progress: Commit and push pending.
+Files changed since last checkpoint: src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py; scripts/run_backtest_report.py; tests/test_backtest_validation.py; docs/RUNBOOK.md; docs/skills/backtest_validation.md; reports/backtests/2026-06-21_mock_backtest_report.md; reports/backtests/2026-06-21_mock_backtest_report.json; LOG.md; PROJECT_STATE.md.
+Git diff summary: Pending final check.
+Execution context used for commands: `[HOST_POWERSHELL]`, `[LOCAL_VENV]`.
+Tests: Phase 06 targeted PASS; full pytest PASS; Ruff PASS; pip check PASS; no-secret scan PASS; diff check PASS with line-ending warnings only.
+Identified risks: Real Freqtrade strategy backtesting and real out-of-sample market-data results are not validated locally and must remain deferred.
+Next safe step: `[HOST_POWERSHELL] git add src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py scripts/run_backtest_report.py tests/test_backtest_validation.py docs/RUNBOOK.md docs/skills/backtest_validation.md reports/backtests/2026-06-21_mock_backtest_report.md reports/backtests/2026-06-21_mock_backtest_report.json LOG.md PROJECT_STATE.md`
 
 ### 2026-06-21 12:19 - Phase 05b - guard-agent
 **Action:** Started Phase 05b Minimal Guard Core after Phase 05 commit `ba8528c` was pushed to `origin/main`.

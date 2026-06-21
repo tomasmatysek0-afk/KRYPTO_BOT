@@ -187,6 +187,54 @@ powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets
 
 Phase 05 local/static checks parse `user_data/strategies/CoinbaseTrendGuardV1.py` without importing Freqtrade locally. Runtime import, backtest, and dry-run behavior remain `DEFERRED_DOCKER_REQUIRED`.
 
+## Phase 06 Local Offline Backtest Validation Checks
+
+These checks are valid in `NO_DOCKER_LOCAL_MODE`.
+
+```powershell
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest tests\test_backtest_validation.py
+
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe scripts\run_backtest_report.py
+
+# [LOCAL_VENV]
+.\.venv\Scripts\python.exe -m pytest
+
+# [LOCAL_VENV]
+.\.venv\Scripts\ruff.exe check .
+
+# [HOST_POWERSHELL]
+powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1 no-secrets
+```
+
+Local Phase 06 output:
+
+- `src/coinbase_freqtrade_guarded_bot/research/backtest_validation.py`;
+- `tests/test_backtest_validation.py`;
+- `scripts/run_backtest_report.py`;
+- `reports/backtests/2026-06-21_mock_backtest_report.md`;
+- `reports/backtests/2026-06-21_mock_backtest_report.json`.
+
+`LOCAL_OFFLINE_PASS` means:
+
+- deterministic trade-list and equity-curve metric functions pass tests;
+- fee/slippage sensitivity returns a numeric scenario table from mock trades;
+- Monte Carlo trade-order resampling returns numeric percentiles and probabilities;
+- walk-forward output returns numeric mock window results;
+- buy-and-hold comparison uses local mock prices;
+- markdown and JSON report generation works;
+- no network, Docker, credentials, or live trading are required.
+
+`DEFERRED_DOCKER_REQUIRED` still applies to:
+
+- real Freqtrade backtest execution;
+- real strategy runtime loading inside Freqtrade;
+- Docker-based Freqtrade backtest;
+- Docker-based data download;
+- real Coinbase/Freqtrade data parity;
+- dry-run runtime validation.
+
 ## Deferred Docker Validation
 
 Status: `DEFERRED_DOCKER_REQUIRED`.
